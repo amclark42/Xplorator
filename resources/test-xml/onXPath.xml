@@ -1,4 +1,5 @@
 <body>
+  <head rend="smallcaps">On XPath</head>
   <div>
     <head>XPath Cheat Sheet</head>
     <div>
@@ -62,7 +63,12 @@
       <li>identify all &lt;persName&gt;s that appear within &lt;person&gt;,</li>
       <li>return only those elements that meet a certain criteria, such as &lt;p&gt; only if it has a value of "nope" in @rend.</li>
     </ul>
-    <p>Whereas XML schemas and documentation wikis will tell you how an element or attribute <emph>ought to be</emph> used, XPath can tell you how an element or attribute <emph>is</emph> used. It does not, however, make any judgments about the validity or correctness of its results. This makes it a useful tool for finding examples or errors, especially when used in conjunction with human judgment, XML schemas, documentation, encoding guidelines, and/or regular expressions.</p>
-    <p>XPath can be used on either a document-level, or across many texts. Here we only test your XPath against one TEI-encoded document, but you can also define working sets within oXygen's XPath tool. Working sets can encompass multiple directories full of XML documents. <DEBUG>To set up a working set in oXygen</DEBUG></p>
+    <p>Whereas XML schemas and documentation wikis will tell you how an element or attribute <hi>ought to be</hi> used, XPath can tell you how an element or attribute <hi>is</hi> used. It does not, however, make any judgments about the validity or correctness of its results. This makes it a useful tool for finding examples or errors, especially when used in conjunction with human judgment, XML schemas, documentation, encoding guidelines, and/or regular expressions.</p>
+    <p>XPath can be used on either a document-level, or across many texts. Here we only test your XPath against one TEI-encoded document, but you can also define working sets within oXygen's XPath tool. Working sets can encompass multiple directories full of XML documents.</p>
+    <!-- xd -->
+    <p>To set up a working set in oXygen, first we will need to select the document icon in the XPath toolbar: <graphic target="test.png"></graphic></p>
   </div>
+  <changelog>
+    <change who="amc" when="2015-05-06">Basic outline using HTML/TEI hybrid.</change>
+  </changelog>
 </body>
