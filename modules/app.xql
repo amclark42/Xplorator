@@ -20,16 +20,26 @@ declare function app:test($node as node(), $model as map(*)) {
         function was triggered by the class attribute <code>class="app:test"</code>.</p>
 };
 
+declare function local:sanitize($xpath as xs:string) {
+    
+};
+
 declare function app:runXPath($node as node(), $model as map(*), $xpath as xs:string?) {
-(:    let $blockedFunctions := (1,2,3):)
-    let $testDoc := doc('../resources/test-xml/test_y.xml')
-    let $tester := doc('../resources/xsl/xpathTester.xsl')
+    let $testDoc := "doc('../resources/test-xml/onXPath.xml')"
+    (:let $tester := doc('../resources/xsl/xpathTester.xsl'):)
+    let $allPath := concat($testDoc,$xpath)
     return
-        <div class="results">
-            <p>{$xpath}</p>
-            {
-                $testDoc
-(:                transform:transform($testDoc, $tester, ()):)
-            }
-        </div>
+        if () then
+            <div class="results">
+                <p>{$xpath}</p>
+                {
+                    (:$testDoc:)
+                    util:eval($allPath)
+                }
+            </div>
+        else (
+            <div class="results">
+                <p>I'm sorry, an error has occurred. Please check your XPath and try again.</p>
+            </div>
+        )
 };

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="3.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
 
 
     <xsl:output media-type="application/html" indent="yes" omit-xml-declaration="yes"/>
     <xsl:param name="xpath">//*/name()</xsl:param>
     <xsl:template match="/">
         <xsl:variable name="results" as="item()*">
-            <xsl:evaluate xpath="$xpath" context-item="."/>
+            <!--<xsl:evaluate xpath="$xpath" context-item="."/>-->
+            <xsl:copy-of select="//*"/>
+            <xsl:for-each select="$xpath">
+                <xsl:copy-of select="."/>
+                
+            </xsl:for-each>
         </xsl:variable>
     <!--<xsl:value-of select="not(empty($results))"></xsl:value-of>-->
         <xsl:choose>
