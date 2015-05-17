@@ -20,7 +20,7 @@ declare function app:test($node as node(), $model as map(*)) {
         function was triggered by the class attribute <code>class="app:test"</code>.</p>
 };
 
-declare function local:sanitize($xpath as xs:string) {
+declare %private function local:sanitize($xpath as xs:string) {
     
 };
 

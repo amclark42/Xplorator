@@ -1,0 +1,15 @@
+Given:
+<text type="greeting">Hi there, <persName xml:id="ash">Ashley</persName>!</text>
+
+Return:
+<p>
+  <span class="xml-view">&lt;text type="greeting"&gt;</span>
+  Hi there,
+  <span class="name">
+    <span class="xml-view">&lt;persName xml:id="ash"&gt;</span>
+    Ashley
+    <span class="xml-view">&lt;/persName&gt;</span>
+  </span>
+  !
+  <span class="xml-view">&lt;/text&gt;</span>
+</p>
