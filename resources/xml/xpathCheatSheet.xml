@@ -1,0 +1,82 @@
+<body>
+  <head rend="smallcaps">XPath Cheat Sheet</head>
+  <div>
+    <head>Syntax</head>
+    
+  </div>
+  <div>
+    <head>Types of Nodes</head>
+    <ul>
+      <li>element</li>
+      <li>attribute</li>
+      <li>comment</li>
+      <li>namespace</li>
+      <li>text</li>
+      <li>processing instruction</li>
+      <li>document</li>
+    </ul>
+  </div>
+  <div>
+    <head>Axis Relations</head>
+    <ol>
+      <ol>
+        <lh>Before "self"</lh>
+        <li>ancestor</li>
+        <li>ancestor-or-self</li>
+        <li>parent</li>
+        <li>preceeding</li>
+        <li>preceeding-sibling</li>
+      </ol>
+      <li>self</li>
+      <ol>
+        <lh>After "self"</lh>
+        <li>following-sibling</li>
+        <li>following</li>
+        <li>child</li>
+        <li>descendant-or-self</li>
+        <li>descendant</li>
+      </ul>
+    </ul>
+    <ul>
+      <li>namespace</li>
+      <li>attribute</li>
+    </ul>
+  </div>
+  <div>
+    <head>Functions</head>
+    <p>XPath functions are also used in XQuery and XSLT! See the <ref target="http://www.w3schools.com/xpath/xpath_functions.asp">awesome and comprehensive list of functions</ref> at W3Schools for functions which didn't make it onto this list.</p>
+    <ul>
+      <li>not()</li>
+      <li>name()</li>
+      <li>local-name()</li>
+      <li>empty()</li>
+      <li>exists()</li>
+      <li>count()</li>
+      <li>distinct-values()</li>
+      <li>position()</li>
+      <ul>
+        <lh>Strings</lh>
+        <li>string()</li>
+        <li>concat()</li>
+        <li>string-join()</li>
+        <li>normalize-space()</li>
+        <li>contains()</li>
+        <li>starts-with()</li>
+        <li>ends-with()</li>
+        <li>matches()</li>
+        <li>replace()</li>
+        <li>tokenize()</li>
+      </ul>
+    </ul>
+  </div>
+  <changelog>
+    <change who="amc" when="2015-05-18">
+      <ul>
+        <li>Moved sections into different XML files.</li>
+        <li>Added "Types of Nodes".</li>
+        <li>Rearranged "Axis Relations".</li>
+      </ul>
+    </change>
+    <change who="amc" when="2015-05-06">Basic outline using HTML/TEI hybrid.</change>
+  </changelog>
+</body>
