@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="content">
-    <form action="">
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround"
+  data-template-with="templates/page.html" data-template-at="content">
+  
+  <div class="col-md-4">
+    <div>
+      <h2>XPath</h2>
+      <form action="">
         <label for="xpath">Enter your XPath:</label>
         <input name="xpath"/>
-    </form>
-    <div>
-        <div data-template="app:runXPath"/>
+      </form>
     </div>
+    <div>
+      <h2>Results</h2>
+      <div data-template="app:runXPath"/>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h2>Documents</h2>
+    
+  </div>
 </div>
