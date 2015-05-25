@@ -1,2 +1,5 @@
  # The products of ant builds
 build/*
+
+ # Any file backups
+*~
