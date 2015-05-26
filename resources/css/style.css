@@ -1,1 +1,76 @@
-/* Application styles could go here */
+/* Xplorator-specific styles */
+
+/* Color palette */
+.color-primary-1 { color: #FFCAAA } /* lightest */
+.color-primary-2 { color: #D4926A } /* lighter */
+.color-primary-0 { color: #AA6339 }	/* Main primary color (brown) */
+.color-primary-3 { color: #803D16 } /* darker */
+.color-primary-4 { color: #552000 } /* darkest */
+
+.color-secondary-1-1 { color: #748BA7 }
+.color-secondary-1-2 { color: #4C678B }
+.color-secondary-1-0 { color: #2C4970 }	/* Main secondary color (blue) */
+.color-secondary-1-3 { color: #143054 }
+.color-secondary-1-4 { color: #051B38 }
+
+.color-secondary-2-1 { color: #A8DB92 }
+.color-secondary-2-2 { color: #77B65B }
+.color-secondary-2-0 { color: #4E9231 }	/* Main secondary color (green) */
+.color-secondary-2-3 { color: #2E6E13 }
+.color-secondary-2-4 { color: #164900 }
+
+html {
+  background-color:#EFEFEF;
+}
+#header {
+  background-color:#AA6339;
+  color:#FFCAAA;
+}
+#content {
+  background-color:#748BA7;
+}
+#footer {
+  background-color:#051B38;
+  color:#748BA7;
+}
+
+/* Thanks to Chris Bracco for this solution for placing the footer at the 
+  bottom of the page. http://codepen.io/cbracco/pen/zekgx */
+html, body {
+  height:100%;
+}
+
+.wrapper {
+	min-height:100%;
+}
+
+#main-container {
+	position:relative;
+	padding-top:10px;
+	padding-bottom:60px; /* height of the footer */
+}
+
+#content {
+  margin-top:2px;
+}
+
+#footer {
+	bottom:0;
+	left:0;
+	width:100%;
+	height:60px;
+	position:absolute;
+  box-sizing: inherit;
+}
+
+#footer p {
+  margin:5px 20px;
+}
+
+#xpathform {
+  padding-top:15px;
+}
+
+.nav-tabs > li {
+  padding: 5px;
+}

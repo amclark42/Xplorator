@@ -4,30 +4,29 @@
   
   <div class="col-md-4">
     <div>
-      <h2>XPath</h2>
-      <form action="">
+      <form id="xpathform" method="post">
         <label for="xpath">Enter your XPath:</label>
         <input name="xpath"/>
       </form>
     </div>
     <div>
-      <h2>Results</h2>
+      <h4>Results</h4>
       <div data-template="app:runXPath"/>
     </div>
   </div>
   <div class="col-md-4">
-    <h2>Documents</h2>
     <div role="tabpanel">
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">XPath Basics</li>
-        <li role="presentation"></li>
-        <li role="presentation">Why XPath?</li>
+        <li role="presentation" class="active" data-toggle="tab">XPath Basics</li>
+        <!--<li role="presentation" data-toggle="tab"></li>-->
+        <li role="presentation" data-toggle="tab">Why XPath?</li>
       </ul>
       <ul class="tab-content">
         <li role="tabpanel" class="tab-pane active" id="basics">Stuff goes here</li>
         <li role="tabpanel" class="tab-pane">Text goes here</li>
         <li role="tabpanel" class="tab-pane" id="why">Miscellany goes here</li>
       </ul>
+      <!--<iframe src="resources/xml/whyXPath.xml">If you can see this message, your browser does not support iframes.</iframe>-->
     </div>
   </div>
 </div>
