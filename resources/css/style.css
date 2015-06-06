@@ -34,6 +34,7 @@ html {
   color:#748BA7;
 }
 
+/* Other CSS */
 /* Thanks to Chris Bracco for this solution for placing the footer at the 
   bottom of the page. http://codepen.io/cbracco/pen/zekgx */
 html, body {
@@ -52,6 +53,7 @@ html, body {
 
 #content {
   margin-top:2px;
+  padding-top:5px;
 }
 
 #footer {
@@ -69,8 +71,4 @@ html, body {
 
 #xpathform {
   padding-top:15px;
-}
-
-.nav-tabs > li {
-  padding: 5px;
 }

@@ -32,7 +32,7 @@ declare function app:test($node as node(), $model as map(*)) {
 
 (: Run a user-defined XPath. :)
 declare function app:runXPath($node as node(), $model as map(*), $xpath as xs:string?) {
-    let $testDoc := "doc('../resources/xml/whatCanYouDoWithXPath.xml')"
+    let $testDoc := "doc('../resources/xml/whyXPath.xml')"
     (:let $tester := doc('../resources/xsl/xpathTester.xsl'):)
     let $allPath := concat($testDoc,$xpath)
     return
