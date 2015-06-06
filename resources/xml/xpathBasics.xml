@@ -18,17 +18,17 @@
   </div>
   <div>
     <head>Axis Relations</head>
-    <ol>
-      <ol>
+    <ul>
+      <ul>
         <lh>Before "self"</lh>
         <li>ancestor</li>
         <li>ancestor-or-self</li>
         <li>parent</li>
         <li>preceeding</li>
         <li>preceeding-sibling</li>
-      </ol>
+      </ul>
       <li>self</li>
-      <ol>
+      <ul>
         <lh>After "self"</lh>
         <li>following-sibling</li>
         <li>following</li>
