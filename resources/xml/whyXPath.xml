@@ -1,21 +1,38 @@
 <?xml-stylesheet type="text/xsl" href="../xslViewer.xsl"?>
 <body>
-  <head>What Can You Do With XPath?</head>
+  <head>Why Use XPath?</head>
   <div>
-    <p>As long as you know how to navigate the XML tree, you can characterize a document by its structural XML - its elements and attributes - as well as the human-friendly content, such as text values of those elements and attributes.</p>
+    <p>As long as you know how to navigate the XML tree, you can characterize a 
+      document by its structural XML - its elements and attributes - as well as 
+      the human-friendly content, such as text values of those elements and 
+      attributes.</p>
     <p>With XPath, you can:</p>
     <ul>
       <li>find all values used in an attribute,</li>
-      <li>identify all <code>&lt;persName&gt;</code>s that appear within <code>&lt;person&gt;</code>,</li>
-      <li>return only those elements that meet a certain criteria, such as <code>&lt;p&gt;</code> only if it has a value of "nope" in <code>@rend</code>.</li>
+      <li>identify all <code>&lt;persName&gt;</code>s that appear within 
+        <code>&lt;person&gt;</code>,</li>
+      <li>return only those elements that meet a certain criteria, such as 
+        <code>&lt;p&gt;</code> only if it has a value of "nope" in the
+        attribute <code>@rend</code>.</li>
     </ul>
-    <p>Whereas XML schemas and documentation wikis will tell you how an element or attribute <hi>ought to be</hi> used, XPath can tell you how an element or attribute <hi>is</hi> used. It does not, however, make any judgments about the validity or correctness of its results. This makes it a useful tool for finding examples or errors, especially when used in conjunction with human judgment, XML schemas, documentation, encoding guidelines, and/or regular expressions.</p>
-    <p>XPath can be used on either a document-level, or across many texts. Generally, if used on multiple documents, the XPath is run on each, one at a time. The results may be grouped by document.</p>
-    <!-- xd -->
-    <p>You can also define working sets within oXygen's XPath tool. Working sets can encompass multiple directories full of XML documents. To set up a working set in oXygen, first we will need to select the document icon in the XPath toolbar: <graphic target="test.png"></graphic></p>
+    <p>While XML schemas and documentation wikis will tell you how an element 
+      or attribute <hi>ought to be</hi> used, XPath can tell you how an element 
+      or attribute <hi>is</hi> used. It does not, however, make any judgments 
+      about the validity or correctness of its results. This makes it a useful 
+      tool for finding examples or errors, especially when used in conjunction 
+      with human judgment, XML schemas, documentation, encoding guidelines, 
+      and/or regular expressions.</p>
+    <p>XPath is also an essential prerequisite for building or reading XML 
+      schemas, XSL transformations, and XQueries. In fact, XPath 2.0 was 
+      designed in conjunction with XQuery 1.0, so that if you can write XPath 
+      2.0, you can write basic XQueries.</p>
+    <p>If you work with XML, it's very likely XPath can solve some kind of 
+      problem for you. It's even more likely that XPath is already being used 
+      behind the scenes to make your current work easier!</p>
   </div>
   
   <changelog>
+    <change who="amc" when="2015-06-07">Some additions and edits. Deleted oXygen paragraph.</change>
     <change who="amc" when="2015-06-06">Moved oXygen instructions to their own paragraph. Might delete it, or move it to its own document.</change>
     <change who="amc" when="2015-05-18">Moved sections into different XML files.</change>
     <change who="amc" when="2015-05-06">Basic outline using HTML/TEI hybrid.</change>

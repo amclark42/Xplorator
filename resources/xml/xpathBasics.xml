@@ -1,6 +1,6 @@
 <?xml-stylesheet type="text/xsl" href="../xslViewer.xsl"?>
 <body>
-  <head rend="smallcaps">XPath Cheat Sheet</head>
+  <head>XPath Cheat Sheet</head>
   <test>//</test>
   <div>
     <head>Shortcuts</head>
