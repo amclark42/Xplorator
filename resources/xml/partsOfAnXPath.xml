@@ -1,0 +1,68 @@
+<body>
+  <head>The Parts of an XPath</head>
+  <div>
+    <head>Steps</head>
+    <p>When building an XPath, you might need to specify one or more locations 
+      within an XML document. To do this, use "/" to indicate that you are 
+      making a step along the tree.</p>
+    <p>For example, in the XPath <code>/TEI/teiHeader</code>, we make our
+      first step to <code>&lt;TEI&gt;</code>, the <i>root node</i> of the document. Next,
+      we step to <code>&lt;teiHeader&gt;</code>, which is a child of the TEI node.</p>
+  </div>
+  <div>
+    <head>Node Tests</head>
+    <p>Once you make a step into a document's node, you'll want to decide 
+      whether or not it meets your search criteria. You can accomplish this
+      with node tests.</p>
+    <p>The most basic node test is the name test. We have already seen an 
+      example of this in <code>/TEI/teiHeader</code>. We specifically want
+      to match root nodes with the name "TEI", as opposed to "HTML" or 
+      "MODS". Similarly, we want <code>&lt;TEI&gt;</code>'s child 
+      <code>&lt;teiHeader&gt;</code>, not its child <code>&lt;text&gt;</code></p>
+    <div>
+      <head>Namespaces</head>
+      <p></p>
+    </div>
+    <div>
+      <head>Axes</head>
+      <p>An axis is used to specify a node's relationship to another node. 
+        Axes are optional, but powerful tools in XPath; they allow your next 
+        step to reach any other node on the tree. There are a 13 types of 
+        axes relationships, such as "parent" or "descendant". To use them, 
+        preface the node name with an axis relationship and the characters 
+        "::".</p>
+      <box>
+        <head>Shortcut!</head>
+        <p><code>//</code> is short for <code>/descendant-or-self::</code>.
+          It tells the XPath processor that you want to find the next node 
+          no matter how far down the XML tree it is!</p>
+      </box>
+      <p>Let's say we want to rewrite our previous example to use our 
+        knowledge of axes. Because we want the child of 
+        <code>&lt;TEI&gt;</code> with the name "teiHeader", we could use the
+        XPath <code>/TEI/child::teiHeader</code> to accomplish the same thing,
+        only with more typing! The "child::" axis is the default, which is why 
+        we didn't need to add it to our original example.</p>
+      <p>It's worth noting that you can absolutely go <i>up</i> the XML tree, 
+        not just down. <code>//author/ancestor::teiHeader</code> will get you 
+        <code>&lt;teiHeader&gt;</code>, but only if it has at least one 
+        descendant node named "author".</p>
+    </div>
+  </div>
+  <div>
+    <head>Predicates</head>
+    <p></p>
+  </div>
+  <div>
+    <head>Functions</head>
+    <p></p>
+  </div>
+  <div>
+    <head>Putting It All Together</head>
+    <p></p>
+  </div>
+  
+  <changelog>
+    <change who="amc" when="2015-06-06">Created, added descriptions of steps, node tests and axes.</change>
+  </changelog>
+</body>

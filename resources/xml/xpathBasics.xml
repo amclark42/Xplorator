@@ -1,8 +1,25 @@
+<?xml-stylesheet type="text/xsl" href="../xslViewer.xsl"?>
 <body>
   <head rend="smallcaps">XPath Cheat Sheet</head>
+  <test>//</test>
   <div>
-    <head>Syntax</head>
-    
+    <head>Shortcuts</head>
+    <ul>
+      <li>//</li>
+      <li>*</li>
+      <li>node()</li>
+      <li>.</li>
+      <li>..</li>
+    </ul>
+  </div>
+  <div>
+    <head>Types of Results</head>
+    <ul>
+      <li>Node-set</li>
+      <li>Boolean</li>
+      <li>Number</li>
+      <li>String</li>
+    </ul>
   </div>
   <div>
     <head>Types of Nodes</head>
@@ -20,16 +37,16 @@
     <head>Axis Relations</head>
     <ul>
       <ul>
-        <lh>Before "self"</lh>
+        <lh>Reverse axes (before "self")</lh>
         <li>ancestor</li>
         <li>ancestor-or-self</li>
         <li>parent</li>
-        <li>preceeding</li>
-        <li>preceeding-sibling</li>
+        <li>preceding</li>
+        <li>preceding-sibling</li>
       </ul>
       <li>self</li>
       <ul>
-        <lh>After "self"</lh>
+        <lh>Forward axes (after "self")</lh>
         <li>following-sibling</li>
         <li>following</li>
         <li>child</li>
@@ -69,7 +86,9 @@
       </ul>
     </ul>
   </div>
+  
   <changelog>
+    <change who="amc" when="2015-06-06">Moved "Syntax" section to new document "partsOfAnXPath.xml".</change>
     <change who="amc" when="2015-05-18">
       <ul>
         <li>Moved sections into different XML files.</li>

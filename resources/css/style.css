@@ -33,6 +33,9 @@ html {
   background-color:#051B38;
   color:#748BA7;
 }
+a {
+  color:black;
+}
 
 /* Other CSS */
 /* Thanks to Chris Bracco for this solution for placing the footer at the 
