@@ -1,40 +1,40 @@
-<?xml-stylesheet type="text/xsl" href="../xslViewer.xsl"?>
-<body>
-  <head>Why Use XPath?</head>
-  <div>
-    <p>As long as you know how to navigate the XML tree, you can characterize a 
+<?xml version="1.0" encoding="UTF-8"?>
+<mtx:sc xmlns:mtx="http://xplorator.org/metallix" xml:id="d1e2">
+  <mtx:rh xml:id="d1e4">Why Use XPath?</mtx:rh>
+  <mtx:ti xml:id="d1e7">
+    <mtx:cr xml:id="d1e9">As long as you know how to navigate the XML tree, you can characterize a 
       document by its structural XML - its elements and attributes - as well as 
       the human-friendly content, such as text values of those elements and 
-      attributes.</p>
-    <p>With XPath, you can:</p>
-    <ul>
-      <li>find all values used in an attribute,</li>
-      <li>identify all <code>&lt;persName&gt;</code>s that appear within 
-        <code>&lt;person&gt;</code>,</li>
-      <li>return only those elements that meet a certain criteria, such as 
-        <code>&lt;p&gt;</code> only if it has a value of "nope" in the
-        attribute <code>@rend</code>.</li>
-    </ul>
-    <p>While XML schemas and documentation wikis will tell you how an element 
-      or attribute <hi>ought to be</hi> used, XPath can tell you how an element 
-      or attribute <hi>is</hi> used. It does not, however, make any judgments 
+      attributes.</mtx:cr>
+    <mtx:cr xml:id="d1e12">With XPath, you can:</mtx:cr>
+    <mtx:ne xml:id="d1e15">
+      <mtx:mn xml:id="d1e17">find all values used in an attribute,</mtx:mn>
+      <mtx:mn xml:id="d1e20">identify all <mtx:fe xml:id="d1e22">&lt;persName&gt;</mtx:fe>s that appear within 
+        <mtx:fe xml:id="d1e25">&lt;person&gt;</mtx:fe>,</mtx:mn>
+      <mtx:mn xml:id="d1e29">return only those elements that meet a certain criteria, such as 
+        <mtx:fe xml:id="d1e31">&lt;p&gt;</mtx:fe> only if it has a value of "nope" in the
+        attribute <mtx:fe xml:id="d1e34">@rend</mtx:fe>.</mtx:mn>
+    </mtx:ne>
+    <mtx:cr xml:id="d1e39">While XML schemas and documentation wikis will tell you how an element 
+      or attribute <mtx:pd xml:id="d1e41">ought to be</mtx:pd> used, XPath can tell you how an element 
+      or attribute <mtx:pd xml:id="d1e44">is</mtx:pd> used. It does not, however, make any judgments 
       about the validity or correctness of its results. This makes it a useful 
       tool for finding examples or errors, especially when used in conjunction 
       with human judgment, XML schemas, documentation, encoding guidelines, 
-      and/or regular expressions.</p>
-    <p>XPath is also an essential prerequisite for building or reading XML 
+      and/or regular expressions.</mtx:cr>
+    <mtx:cr xml:id="d1e48">XPath is also an essential prerequisite for building or reading XML 
       schemas, XSL transformations, and XQueries. In fact, XPath 2.0 was 
       designed in conjunction with XQuery 1.0, so that if you can write XPath 
-      2.0, you can write basic XQueries.</p>
-    <p>If you work with XML, it's very likely XPath can solve some kind of 
+      2.0, you can write basic XQueries.</mtx:cr>
+    <mtx:cr xml:id="d1e52">If you work with XML, it's very likely XPath can solve some kind of 
       problem for you. It's even more likely that XPath is already being used 
-      behind the scenes to make your current work easier!</p>
-  </div>
+      behind the scenes to make your current work easier!</mtx:cr>
+  </mtx:ti>
   
-  <changelog>
-    <change who="amc" when="2015-06-07">Some additions and edits. Deleted oXygen paragraph.</change>
-    <change who="amc" when="2015-06-06">Moved oXygen instructions to their own paragraph. Might delete it, or move it to its own document.</change>
-    <change who="amc" when="2015-05-18">Moved sections into different XML files.</change>
-    <change who="amc" when="2015-05-06">Basic outline using HTML/TEI hybrid.</change>
-  </changelog>
-</body>
+  <mtx:changelog xml:id="d1e56">
+    <mtx:change xml:id="d1e58" who="amc" when="2015-06-07">Some additions and edits. Deleted oXygen paragraph.</mtx:change>
+    <mtx:change xml:id="d1e61" who="amc" when="2015-06-06">Moved oXygen instructions to their own paragraph. Might delete it, or move it to its own document.</mtx:change>
+    <mtx:change xml:id="d1e64" who="amc" when="2015-05-18">Moved sections into different XML files.</mtx:change>
+    <mtx:change xml:id="d1e67" who="amc" when="2015-05-06">Basic outline using HTML/TEI hybrid.</mtx:change>
+  </mtx:changelog>
+</mtx:sc>

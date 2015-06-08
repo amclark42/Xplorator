@@ -1,163 +1,164 @@
-<body>
-  <head>The Parts of an XPath</head>
-  <div>
-    <head>Steps</head>
-    <p>When building an XPath, you might need to specify one or more locations 
+<?xml version="1.0" encoding="UTF-8"?>
+<mtx:sc xmlns:mtx="http://xplorator.org/metallix" xml:id="d1e1">
+  <mtx:rh xml:id="d1e3">The Parts of an XPath</mtx:rh>
+  <mtx:ti xml:id="d1e6">
+    <mtx:rh xml:id="d1e8">Steps</mtx:rh>
+    <mtx:cr xml:id="d1e11">When building an XPath, you might need to specify one or more locations 
       within an XML document. To do this, use "/" to indicate that you are 
       making a step along the tree. Your results will be gathered from only the
-      node on the last step you make.</p>
-    <p>For example, in the XPath <code>/TEI/teiHeader</code>, we make our
-      first step to <code>&lt;TEI&gt;</code>, the <hi>root node</hi> of the 
-      document. Next, we step to <code>&lt;teiHeader&gt;</code>, which is a 
+      node on the last step you make.</mtx:cr>
+    <mtx:cr xml:id="d1e14">For example, in the XPath <mtx:fe xml:id="d1e16">/TEI/teiHeader</mtx:fe>, we make our
+      first step to <mtx:fe xml:id="d1e19">&lt;TEI&gt;</mtx:fe>, the <mtx:pd xml:id="d1e22">root node</mtx:pd> of the 
+      document. Next, we step to <mtx:fe xml:id="d1e25">&lt;teiHeader&gt;</mtx:fe>, which is a 
       child of the TEI node. Note that while we used the "TEI" node as a 
-      stepping stone, only matching "teiHeader" nodes will be returned.</p>
-  </div>
-  <div>
-    <head>Node Tests</head>
-    <p>Once you make a step into a document's node, you'll want to decide 
+      stepping stone, only matching "teiHeader" nodes will be returned.</mtx:cr>
+  </mtx:ti>
+  <mtx:ti xml:id="d1e30">
+    <mtx:rh xml:id="d1e32">Node Tests</mtx:rh>
+    <mtx:cr xml:id="d1e35">Once you make a step into a document's node, you'll want to decide 
       whether or not it meets your search criteria. You can accomplish this
-      with node tests.</p>
-    <p>The most basic node test is the name test. We have already seen an 
-      example of this in <code>/TEI/teiHeader</code>. We specifically want
+      with node tests.</mtx:cr>
+    <mtx:cr xml:id="d1e38">The most basic node test is the name test. We have already seen an 
+      example of this in <mtx:fe xml:id="d1e40">/TEI/teiHeader</mtx:fe>. We specifically want
       to match root nodes with the name "TEI", as opposed to "HTML" or 
-      "MODS". Similarly, we want <code>&lt;TEI&gt;</code>'s child 
-      <code>&lt;teiHeader&gt;</code>, not its child <code>&lt;text&gt;</code></p>
-    <div>
-      <head>Axes</head>
-      <p>An axis is used to specify a node's relationship to another node. 
+      "MODS". Similarly, we want <mtx:fe xml:id="d1e43">&lt;TEI&gt;</mtx:fe>'s child 
+      <mtx:fe xml:id="d1e46">&lt;teiHeader&gt;</mtx:fe>, not its child <mtx:fe xml:id="d1e49">&lt;text&gt;</mtx:fe></mtx:cr>
+    <mtx:ti xml:id="d1e52">
+      <mtx:rh xml:id="d1e54">Axes</mtx:rh>
+      <mtx:cr xml:id="d1e57">An axis is used to specify a node's relationship to another node. 
         Axes are optional, but powerful tools in XPath; they allow your next 
         step to reach any other node on the tree. There are a 13 types of 
         axes relationships, such as "parent" or "descendant". To use them, 
         preface the node name with an axis relationship and the characters 
-        "::".</p>
-      <box>
-        <head>Shortcuts!</head>
-        <p><code>//</code> is short for <code>/descendant-or-self::</code>.
+        "::".</mtx:cr>
+      <mtx:ir xml:id="d1e60">
+        <mtx:rh xml:id="d1e62">Shortcuts!</mtx:rh>
+        <mtx:cr xml:id="d1e65"><mtx:fe xml:id="d1e66">//</mtx:fe> is short for <mtx:fe xml:id="d1e69">/descendant-or-self::</mtx:fe>.
           It tells the XPath processor that you want to find the next node 
-          no matter how far down the XML tree it is!</p>
-        <p><code>.</code> is short for <code>self::node()</code>. It selects 
+          no matter how far down the XML tree it is!</mtx:cr>
+        <mtx:cr xml:id="d1e73"><mtx:fe xml:id="d1e74">.</mtx:fe> is short for <mtx:fe xml:id="d1e77">self::node()</mtx:fe>. It selects 
           the node at the current step you're on. This becomes especially 
-          useful when using predicates (described below).</p>
-        <p><code>..</code> is similarly short for <code>parent::node()</code>. 
+          useful when using predicates (described below).</mtx:cr>
+        <mtx:cr xml:id="d1e81"><mtx:fe xml:id="d1e82">..</mtx:fe> is similarly short for <mtx:fe xml:id="d1e85">parent::node()</mtx:fe>. 
           If you need to match a parent node without knowing exactly what it's 
-          named, you could just write out <code>//author/..</code>.</p>
-      </box>
-      <p>Let's say we want to rewrite our previous example to use our 
+          named, you could just write out <mtx:fe xml:id="d1e88">//author/..</mtx:fe>.</mtx:cr>
+      </mtx:ir>
+      <mtx:cr xml:id="d1e93">Let's say we want to rewrite our previous example to use our 
         knowledge of axes. Because we want the child of 
-        <code>&lt;TEI&gt;</code> with the name "teiHeader", we could use the
-        XPath <code>/TEI/child::teiHeader</code> to accomplish the same thing,
+        <mtx:fe xml:id="d1e95">&lt;TEI&gt;</mtx:fe> with the name "teiHeader", we could use the
+        XPath <mtx:fe xml:id="d1e98">/TEI/child::teiHeader</mtx:fe> to accomplish the same thing,
         only with more typing! The "child::" axis is the default, which is why 
-        we didn't need to add it to our original example.</p>
-      <p>It's worth noting that you can absolutely go <hi>up</hi> the XML tree, 
-        not just down. <code>//author/ancestor::teiHeader</code>, for example.
+        we didn't need to add it to our original example.</mtx:cr>
+      <mtx:cr xml:id="d1e102">It's worth noting that you can absolutely go <mtx:pd xml:id="d1e104">up</mtx:pd> the XML tree, 
+        not just down. <mtx:fe xml:id="d1e107">//author/ancestor::teiHeader</mtx:fe>, for example.
         This XPath finds all "author" nodes first, and tries to match a 
-        <code>&lt;teiHeader&gt;</code> ancestor.</p>
-    </div>
-  </div>
-  <div>
-    <head>Predicates</head>
-    <p>Predicates are another way you can limit your XPath's results. 
+        <mtx:fe xml:id="d1e110">&lt;teiHeader&gt;</mtx:fe> ancestor.</mtx:cr>
+    </mtx:ti>
+  </mtx:ti>
+  <mtx:ti xml:id="d1e116">
+    <mtx:rh xml:id="d1e118">Predicates</mtx:rh>
+    <mtx:cr xml:id="d1e121">Predicates are another way you can limit your XPath's results. 
       Predicates come at the end of a node test, set off by square brackets "[" 
       and "]". Inside those brackets, you place a qualifying test. You might 
       find it helpful to think of predicates as a true-or-false (aka boolean) 
-      test on the node you select.</p>
-    <p>Let's return to <code>//author/ancestor::teiHeader</code>. There is only 
-      ever one <code>&lt;teiHeader&gt;</code> in TEI documents, so our results 
+      test on the node you select.</mtx:cr>
+    <mtx:cr xml:id="d1e124">Let's return to <mtx:fe xml:id="d1e126">//author/ancestor::teiHeader</mtx:fe>. There is only 
+      ever one <mtx:fe xml:id="d1e129">&lt;teiHeader&gt;</mtx:fe> in TEI documents, so our results 
       will always be either one "teiHeader" node (if at least one 
-      <code>&lt;author&gt;</code> has it as an ancestor), or none (if author 
-      has no ancestors whose names are "teiHeader").</p>
-    <p>We can simplify this XPath with predicates. We know we want the result 
+      <mtx:fe xml:id="d1e132">&lt;author&gt;</mtx:fe> has it as an ancestor), or none (if author 
+      has no ancestors whose names are "teiHeader").</mtx:cr>
+    <mtx:cr xml:id="d1e136">We can simplify this XPath with predicates. We know we want the result 
       to be the node named "teiHeader", so we start our XPath: 
-      <code>//teiHeader</code>.</p>
-    <p>Now, we only want <code>&lt;teiHeader&gt;</code> where the node test 
-      <code>descendant::author</code> is true. If we use location steps, our 
-      results will show every author descendant, not the teiHeader itself.</p>
-    <p>Instead, we place the node test within a predicate: 
-      <code>//teiHeader[descendant::author]</code>. This roughly translates to, 
-      "Give me any node named "teiHeader", but only <hi>when at least one 
-      <code>&lt;author&gt;</code> is its a descendant</hi>".</p>
-  </div>
-  <div>
-    <head>Comparisons</head>
-    <p>XPath can also compare text, numbers, and nodes. These operations 
+      <mtx:fe xml:id="d1e138">//teiHeader</mtx:fe>.</mtx:cr>
+    <mtx:cr xml:id="d1e142">Now, we only want <mtx:fe xml:id="d1e144">&lt;teiHeader&gt;</mtx:fe> where the node test 
+      <mtx:fe xml:id="d1e147">descendant::author</mtx:fe> is true. If we use location steps, our 
+      results will show every author descendant, not the teiHeader itself.</mtx:cr>
+    <mtx:cr xml:id="d1e152">Instead, we place the node test within a predicate: 
+      <mtx:fe xml:id="d1e154">//teiHeader[descendant::author]</mtx:fe>. This roughly translates to, 
+      "Give me any node named "teiHeader", but only <mtx:pd xml:id="d1e157">when at least one 
+      <mtx:fe xml:id="d1e159">&lt;author&gt;</mtx:fe> is its a descendant</mtx:pd>".</mtx:cr>
+  </mtx:ti>
+  <mtx:ti xml:id="d1e165">
+    <mtx:rh xml:id="d1e167">Comparisons</mtx:rh>
+    <mtx:cr xml:id="d1e170">XPath can also compare text, numbers, and nodes. These operations 
       correspond to basic arithmetic signs, Boolean operators, and set theory 
-      notations. Here are some operators you can use:</p>
-    <ol>
-      <li><hi>or, and</hi></li>
-      <li><hi>=, !=, &lt;, &gt;, &lt;=, &gt;=</hi></li>
-      <li><hi>+, -</hi></li>
-      <li><hi>*, div, mod</hi></li>
-      <li><hi>|</hi></li>
-    </ol>
-    <p>If we wanted to find this node 
-      <code>&lt;author&gt;Bradbury, Ray&lt;author/&gt;</code>, we could use the 
-      XPath <code>//author[.='Bradbury, Ray']</code> to find it. The "." says 
+      notations. Here are some operators you can use:</mtx:cr>
+    
+      <mtx:mn xml:id="d1e175"><mtx:pd xml:id="d1e176">or, and</mtx:pd></mtx:mn>
+      <mtx:mn xml:id="d1e179"><mtx:pd xml:id="d1e180">=, !=, &lt;, &gt;, &lt;=, &gt;=</mtx:pd></mtx:mn>
+      <mtx:mn xml:id="d1e183"><mtx:pd xml:id="d1e184">+, -</mtx:pd></mtx:mn>
+      <mtx:mn xml:id="d1e187"><mtx:pd xml:id="d1e188">*, div, mod</mtx:pd></mtx:mn>
+      <mtx:mn xml:id="d1e191"><mtx:pd xml:id="d1e192">|</mtx:pd></mtx:mn>
+    
+    <mtx:cr xml:id="d1e196">If we wanted to find this node 
+      <mtx:fe xml:id="d1e198">&lt;author&gt;Bradbury, Ray&lt;author/&gt;</mtx:fe>, we could use the 
+      XPath <mtx:fe xml:id="d1e201">//author[.='Bradbury, Ray']</mtx:fe> to find it. The "." says 
       that we're using the current node context (a child of a node named 
       "author"). Since the text() node within our above 
-      <code>&lt;author&gt;</code> exactly equals "Bradbury, Ray", the predicate 
-      evaluates to "true" and we retrieve the correct results.</p>
-    <box>
-      <head>A Little Mathe-magic</head>
-      <p>XPath is perfectly capable of doing basic arithmetic on arbitrary 
+      <mtx:fe xml:id="d1e204">&lt;author&gt;</mtx:fe> exactly equals "Bradbury, Ray", the predicate 
+      evaluates to "true" and we retrieve the correct results.</mtx:cr>
+    <mtx:ir xml:id="d1e208">
+      <mtx:rh xml:id="d1e210">A Little Mathe-magic</mtx:rh>
+      <mtx:cr xml:id="d1e213">XPath is perfectly capable of doing basic arithmetic on arbitrary 
         numbers. While XPath is much more useful for traversing and matching 
         XML nodes, if you ever have a burning desire to know what the modulo of 
-        78914 by 8 is, just type <code>78914 mod 8</code> into your XPath tool!</p>
-    </box>
-  </div>
-  <div>
-    <head>Functions</head>
-    <p>Operators are a useful, but you may wish do apply more advanced methods 
+        78914 by 8 is, just type <mtx:fe xml:id="d1e215">78914 mod 8</mtx:fe> into your XPath tool!</mtx:cr>
+    </mtx:ir>
+  </mtx:ti>
+  <mtx:ti xml:id="d1e222">
+    <mtx:rh xml:id="d1e224">Functions</mtx:rh>
+    <mtx:cr xml:id="d1e227">Operators are a useful, but you may wish do apply more advanced methods 
       on your results. XPath comes with pre-defined functions which perform 
       specialized operations. Functions are structured like this: 
-      <code>FUNCTNAME(PARAMETER1,PARAM2)</code>. The function name usually 
+      <mtx:fe xml:id="d1e229">FUNCTNAME(PARAMETER1,PARAM2)</mtx:fe>. The function name usually 
       describes the action to be applied on any parameters. The number of 
       parameters themselves can range from 0 to 3+, depending on the function 
       used. And the result of the function can be anything from a line of text, 
-      to a boolean value, to an ISO date-time value.</p>
-    <p>What if we want to find <code>&lt;author&gt;</code>s representing Ray 
+      to a boolean value, to an ISO date-time value.</mtx:cr>
+    <mtx:cr xml:id="d1e233">What if we want to find <mtx:fe xml:id="d1e235">&lt;author&gt;</mtx:fe>s representing Ray 
       Bradbury, but we aren't sure if his name is typed out as "Bradbury, Ray" 
       or "Ray Bradbury"? If we are confident that there are no other authors 
       named "Bradbury" in our XML documents, we can search for 
-      <code>//author[contains(.,'Bradbury')]</code>, or "<hi>Only those 
-      <code>&lt;author&gt;</code>s who have a (text) child containing the 
-      word 'Bradbury'</hi>".</p>
-    <p>All XPath 1.0 functions are listed <ref target="functionsList.xml">here</ref>. 
+      <mtx:fe xml:id="d1e238">//author[contains(.,'Bradbury')]</mtx:fe>, or "<mtx:pd xml:id="d1e241">Only those 
+      <mtx:fe xml:id="d1e243">&lt;author&gt;</mtx:fe>s who have a (text) child containing the 
+      word 'Bradbury'</mtx:pd>".</mtx:cr>
+    <mtx:cr xml:id="d1e248">All XPath 1.0 functions are listed <mtx:zn xml:id="d1e250" au="functionsList.xml">here</mtx:zn>. 
       The functions in XPath 2.0 are also especially useful. See the 
-      <ref target="http://www.w3schools.com/xpath/xpath_functions.asp">awesome 
-      and comprehensive list of functions</ref> at W3Schools for the complete 
-      list.</p>
-  </div>
-  <div>
-    <head>Putting It All Together</head>
-    <p>That's about it! You now have the pieces you need to construct your own 
+      <mtx:zn xml:id="d1e253" au="http://www.w3schools.com/xpath/xpath_functions.asp">awesome 
+      and comprehensive list of functions</mtx:zn> at W3Schools for the complete 
+      list.</mtx:cr>
+  </mtx:ti>
+  <mtx:ti xml:id="d1e258">
+    <mtx:rh xml:id="d1e260">Putting It All Together</mtx:rh>
+    <mtx:cr xml:id="d1e263">That's about it! You now have the pieces you need to construct your own 
       XPaths. It's okay if it takes a while before building XPaths becomes 
       second nature. As you can see from the examples above, XPath is a 
       flexible and fairly forgiving language. Whenever you start expressing 
       your query, start small. Don't try to get the whole XPath written in one 
       go. Start with a single node test, and then add steps, axes, predicates, 
       comparisons, or functions one at a time. Break your query down into parts, 
-      and assemble as you experiment!</p>
-    <p>One last example. Using Xplorator's documents, let's try determining the 
+      and assemble as you experiment!</mtx:cr>
+    <mtx:cr xml:id="d1e266">One last example. Using Xplorator's documents, let's try determining the 
       number of "code" elements within each paragraph. Here's one process for 
-      constructing a query:</p>
-    <ul>
-      <li>Get all code elements... <code>//code</code></li>
-      <li>Count all code elements... <code>count(//code)</code></li>
-      <li>Get all paragraph elements... <code>//p</code></li>
-      <li>Get all paragraphs with at least one child named "code"... <code>//p/code</code></li>
-      <li>For each paragraph, count child codes... <code>//p/count(code)</code></li>
-    </ul>
-  </div>
+      constructing a query:</mtx:cr>
+    <mtx:ne xml:id="d1e269">
+      <mtx:mn xml:id="d1e271">Get all code elements... <mtx:fe xml:id="d1e273">//code</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e276">Count all code elements... <mtx:fe xml:id="d1e278">count(//code)</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e281">Get all paragraph elements... <mtx:fe xml:id="d1e283">//p</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e286">Get all paragraphs with at least one child named "code"... <mtx:fe xml:id="d1e288">//p/code</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e291">For each paragraph, count child codes... <mtx:fe xml:id="d1e293">//p/count(code)</mtx:fe></mtx:mn>
+    </mtx:ne>
+  </mtx:ti>
   
-  <changelog>
-    <change who="amc" when="2015-06-07">
-      <ul>
-        <li>Added section on predicates.</li>
-        <li>Added section on comparisons.</li>
-        <li>Added section on functions.</li>
-        <li>Added section "Putting It All Together".</li>
-      </ul>
-    </change>
-    <change who="amc" when="2015-06-06">Created, added descriptions of steps, node tests and axes.</change>
-  </changelog>
-</body>
+  <mtx:changelog xml:id="d1e298">
+    <mtx:change xml:id="d1e300" who="amc" when="2015-06-07">
+      <mtx:ne xml:id="d1e302">
+        <mtx:mn xml:id="d1e304">Added section on predicates.</mtx:mn>
+        <mtx:mn xml:id="d1e307">Added section on comparisons.</mtx:mn>
+        <mtx:mn xml:id="d1e310">Added section on functions.</mtx:mn>
+        <mtx:mn xml:id="d1e313">Added section "Putting It All Together".</mtx:mn>
+      </mtx:ne>
+    </mtx:change>
+    <mtx:change xml:id="d1e318" who="amc" when="2015-06-06">Created, added descriptions of steps, node tests and axes.</mtx:change>
+  </mtx:changelog>
+</mtx:sc>

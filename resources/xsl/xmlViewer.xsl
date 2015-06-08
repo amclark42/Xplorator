@@ -52,12 +52,15 @@
       <xsl:value-of select="$element"/>
     </xsl:variable>
     
-    <span class="xmldoc">
-      <xsl:value-of select="concat($lt,$node)"/>
-      <xsl:value-of select="$gt"/>
+    <span class="element">
+      <xsl:attribute name="xml:id" select="@xml:id"></xsl:attribute>
+      <span class="xmldoc">
+        <xsl:value-of select="concat($lt,$node)"/>
+        <xsl:value-of select="$gt"/>
+      </span>
+      <xsl:call-template name="apply-templates"/>
+      <span class="xmldoc"><xsl:value-of select="concat($lt,'/',$node,$gt)"/></span>
     </span>
-    <xsl:call-template name="apply-templates"/>
-    <span class="xmldoc"><xsl:value-of select="concat($lt,'/',$node,$gt)"/></span>
   </xsl:template>
   
 </xsl:stylesheet>
