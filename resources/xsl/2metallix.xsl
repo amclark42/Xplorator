@@ -41,6 +41,11 @@
       <xsl:apply-templates/>
     </mtx:ne>
   </xsl:template>
+  <xsl:template match="ol">
+    <mtx:nb xml:id="{generate-id()}">
+      <xsl:apply-templates/>
+    </mtx:nb>
+  </xsl:template>
   <xsl:template match="li">
     <mtx:mn xml:id="{generate-id()}">
       <xsl:apply-templates/>
@@ -82,6 +87,12 @@
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates/>
     </mtx:change>
+  </xsl:template>
+  
+  <xsl:template match="*">
+    <DEBUG>
+      <xsl:copy-of select="."/>
+    </DEBUG>
   </xsl:template>
   
 </xsl:stylesheet>

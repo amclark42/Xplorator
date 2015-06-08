@@ -82,13 +82,13 @@
     <p>XPath can also compare text, numbers, and nodes. These operations 
       correspond to basic arithmetic signs, Boolean operators, and set theory 
       notations. Here are some operators you can use:</p>
-    <ol>
+    <ul>
       <li><hi>or, and</hi></li>
       <li><hi>=, !=, &lt;, &gt;, &lt;=, &gt;=</hi></li>
       <li><hi>+, -</hi></li>
       <li><hi>*, div, mod</hi></li>
       <li><hi>|</hi></li>
-    </ol>
+    </ul>
     <p>If we wanted to find this node 
       <code>&lt;author&gt;Bradbury, Ray&lt;author/&gt;</code>, we could use the 
       XPath <code>//author[.='Bradbury, Ray']</code> to find it. The "." says 

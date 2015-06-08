@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mtx:sc xmlns:mtx="http://xplorator.org/metallix" xml:id="d1e1">
+<?xml version="1.0" encoding="UTF-8"?><mtx:sc xmlns:mtx="http://xplorator.org/metallix" xml:id="d1e1">
   <mtx:rh xml:id="d1e3">The Parts of an XPath</mtx:rh>
   <mtx:ti xml:id="d1e6">
     <mtx:rh xml:id="d1e8">Steps</mtx:rh>
@@ -83,13 +82,13 @@
     <mtx:cr xml:id="d1e170">XPath can also compare text, numbers, and nodes. These operations 
       correspond to basic arithmetic signs, Boolean operators, and set theory 
       notations. Here are some operators you can use:</mtx:cr>
-    
+    <mtx:ne xml:id="d1e173">
       <mtx:mn xml:id="d1e175"><mtx:pd xml:id="d1e176">or, and</mtx:pd></mtx:mn>
       <mtx:mn xml:id="d1e179"><mtx:pd xml:id="d1e180">=, !=, &lt;, &gt;, &lt;=, &gt;=</mtx:pd></mtx:mn>
       <mtx:mn xml:id="d1e183"><mtx:pd xml:id="d1e184">+, -</mtx:pd></mtx:mn>
       <mtx:mn xml:id="d1e187"><mtx:pd xml:id="d1e188">*, div, mod</mtx:pd></mtx:mn>
       <mtx:mn xml:id="d1e191"><mtx:pd xml:id="d1e192">|</mtx:pd></mtx:mn>
-    
+    </mtx:ne>
     <mtx:cr xml:id="d1e196">If we wanted to find this node 
       <mtx:fe xml:id="d1e198">&lt;author&gt;Bradbury, Ray&lt;author/&gt;</mtx:fe>, we could use the 
       XPath <mtx:fe xml:id="d1e201">//author[.='Bradbury, Ray']</mtx:fe> to find it. The "." says 
