@@ -11,74 +11,85 @@
   <xsl:variable name="filename" select="(tokenize(document-uri(.),'/'))[last()]"/>
   
   <xsl:template match="mtx:sc">
-    <body id="{concat($filename,'__',@xml:id)}">
+    <body id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </body>
   </xsl:template>
   
-  <xsl:template match="mtx:rh">
-    <h3 id="{concat($filename,'__',@xml:id)}">
+  <xsl:template match="mtx:rh[parent::mtx:ir]">
+    <h3 id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </h3>
   </xsl:template>
+  <xsl:template match="mtx:rh">
+    <xsl:variable name="hLvl" select="2+count(ancestor::*/preceding-sibling::mtx:rh)"/>
+    <xsl:element name="h{$hLvl}">
+      <xsl:attribute name="id" select="concat($filename,'-',@xml:id)"/>
+      <xsl:call-template name="xml-viewer"/>
+    </xsl:element>
+  </xsl:template>
   
   <xsl:template match="mtx:ti">
-    <div id="{concat($filename,'__',@xml:id)}">
+    <div id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </div>
   </xsl:template>
   
   <xsl:template match="mtx:cr">
-    <p id="{concat($filename,'__',@xml:id)}">
+    <p id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </p>
   </xsl:template>
   
-  <xsl:template match="mtx:ne">
-    <ul id="{concat($filename,'__',@xml:id)}">
+  <xsl:template match="mtx:ne | mtx:nb">
+    <div id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
+    </div>
+  </xsl:template>
+  <xsl:template match="mtx:ne/mtx:mn[not(../preceding-sibling::mtx:mn)]">
+    <ul>
+      <xsl:call-template name="list-item"/>
     </ul>
   </xsl:template>
-  <xsl:template match="mtx:nb">
-    <ol id="{concat($filename,'__',@xml:id)}">
-      <xsl:call-template name="xml-viewer"/>
+  <xsl:template match="mtx:nb/mtx:mn[not(../preceding-sibling::mtx:mn)]">
+    <ol>
+      <xsl:call-template name="list-item"/>
     </ol>
   </xsl:template>
-  <xsl:template match="mtx:mn">
-    <li id="{concat($filename,'__',@xml:id)}">
+  <xsl:template match="mtx:mn" name="list-item">
+    <li id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </li>
   </xsl:template>
   
   <xsl:template match="mtx:fe">
-    <code id="{concat($filename,'__',@xml:id)}">
+    <code id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </code>
   </xsl:template>
   
   <xsl:template match="mtx:pd">
-    <span id="{concat($filename,'__',@xml:id)}" class="emph">
+    <span id="{concat($filename,'-',@xml:id)}" class="emph">
       <xsl:call-template name="xml-viewer"/>
     </span>
   </xsl:template>
   
   <xsl:template match="mtx:ir">
-    <div id="{concat($filename,'__',@xml:id)}" class="popout">
+    <div id="{concat($filename,'-',@xml:id)}" class="popout">
       <xsl:call-template name="xml-viewer"/>
     </div>
   </xsl:template>
   
   <xsl:template match="mtx:zn">
-    <a href="{@au}" id="{concat($filename,'__',@xml:id)}">
+    <a href="{@au}" id="{concat($filename,'-',@xml:id)}">
       <xsl:call-template name="xml-viewer"/>
     </a>
   </xsl:template>
   
-  <xsl:template match="mtx:changelog">
-    <xsl:call-template name="xml-viewer"/>
-  </xsl:template>
-  <xsl:template match="mtx:change">
-    <xsl:call-template name="xml-viewer"/>
+  <xsl:template match="mtx:changelog | mtx:change">
+    <div class="xmldoc" id="{concat($filename,'-',@xml:id)}">
+      <xsl:call-template name="xml-viewer"/>
+    </div>
   </xsl:template>
   
 </xsl:stylesheet>

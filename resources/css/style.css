@@ -28,6 +28,7 @@ html {
 }
 #content {
   background-color:#748BA7;
+  color:black;
 }
 #footer {
   background-color:#051B38;
@@ -40,6 +41,10 @@ a {
 /* Other CSS */
 /* Thanks to Chris Bracco for this solution for placing the footer at the 
   bottom of the page. http://codepen.io/cbracco/pen/zekgx */
+.xmldoc {
+  display:none;
+}
+
 html, body {
   height:100%;
 }

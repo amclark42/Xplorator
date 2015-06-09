@@ -39,7 +39,7 @@ declare %private function app:listify($xpath as xs:string) as node()* {
               <td>{$doc}</td>
               <td>{app:reduce-text($result)}</td>
               <td>{util:node-xpath($result)}</td>
-              <td>{ (: A target pointing to the xml:id of the node if it exists. :) }</td>
+              <td></td>
             </tr>
       }
     </table>
