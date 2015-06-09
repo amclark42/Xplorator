@@ -19,6 +19,9 @@
 .color-secondary-2-3 { color: #2E6E13 }
 .color-secondary-2-4 { color: #164900 }
 
+.highlight {
+  background-color:#A8DB92;
+}
 html {
   background-color:#EFEFEF;
 }
@@ -43,6 +46,10 @@ a {
   bottom of the page. http://codepen.io/cbracco/pen/zekgx */
 .xmldoc {
   display:none;
+}
+
+table {
+  width:100%;
 }
 
 html, body {

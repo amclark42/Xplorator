@@ -36,7 +36,7 @@ declare %private function app:listify($xpath as xs:string) as node()* {
         {
           for $doc in ('partsOfAnXPath.xml','whyXPath.xml')
           let $onDoc := concat("doc('../resources/xml/",$doc,"')",$pathedXPath)
-            for $result in util:eval($onDoc)
+            for $result in ( util:eval($onDoc) )
             return
               <tr>
                 <td>{$doc}</td>
@@ -44,7 +44,7 @@ declare %private function app:listify($xpath as xs:string) as node()* {
                 <td>{if ($result instance of element()) then util:node-xpath($result) else ()}</td>
                 <td>
                   <button type="button" class="btn btn-primary result-btn" data-toggle="button" aria-pressed="false"
-                    data-target="{$doc}-{if ($result instance of element()) then $result/*[1]/string(@xml:id) else ()}">&gt;</button>
+                    data-target="{if ($result instance of element()) then concat($doc,'-',$result/string(@xml:id)) else ()}">&gt;</button>
                 </td>
               </tr>
         }
