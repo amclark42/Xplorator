@@ -26,29 +26,43 @@ declare %private function app:reduce-text($item) as xs:string {
 declare %private function app:listify($xpath as xs:string) as node()* {
     let $pathedXPath := if (starts-with($xpath,'/')) then $xpath else concat('/',$xpath)
     return
-      <table>
-        <tr>
-          <th>Document</th>
-          <!--<th>Text</th>-->
-          <th>Position</th>
-          <th>Select</th>
-        </tr>
-        {
-          for $doc in ('partsOfAnXPath.xml','whyXPath.xml')
-          let $onDoc := concat("doc('../resources/xml/",$doc,"')",$pathedXPath)
-            for $result in ( util:eval($onDoc) )
-            return
-              <tr>
-                <td>{$doc}</td>
-                <!--<td>{app:reduce-text($result)}</td>-->
-                <td>{if ($result instance of element()) then util:node-xpath($result) else ()}</td>
-                <td>
-                  <button type="button" class="btn btn-primary result-btn" data-toggle="button" aria-pressed="false"
-                    data-target="{if ($result instance of element()) then concat($doc,'-',$result/string(@xml:id)) else ()}">&gt;</button>
-                </td>
-              </tr>
-        }
-      </table>
+      <div>
+        <p>{$xpath}</p>
+        <table>
+          <tr>
+            <th>Document</th>
+            <!--<th>Text</th>-->
+            <th>Result</th>
+            <th>Select</th>
+          </tr>
+          {
+            for $doc in ('partsOfAnXPath.xml','whyXPath.xml')
+            let $onDoc := concat("doc('../resources/xml/",$doc,"')",$pathedXPath)
+              for $result in ( util:eval($onDoc) )
+              return
+                <tr>
+                  <td>{$doc}</td>
+                  <!--<td>{app:reduce-text($result)}</td>-->
+                  <td>
+                      {
+                        typeswitch($result)
+                          case element() return replace(util:node-xpath($result),'\[[ @:-_.]+\]','')
+                          case attribute() return string($result)
+                          case text() return string($result)
+                          case xs:decimal return string($result)
+                          case comment() return string($result)
+                          case processing-instruction() return string($result)
+                          default return ""
+                      }
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary result-btn" data-toggle="button" aria-pressed="false"
+                      data-target="{if ($result instance of element()) then concat($doc,'-',$result/string(@xml:id)) else ()}">&gt;</button>
+                  </td>
+                </tr>
+          }
+        </table>
+      </div>
 };
 
 (: Run a user-defined XPath. :)

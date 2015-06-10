@@ -25,20 +25,24 @@
 html {
   background-color:#EFEFEF;
 }
+table, td, th {
+  border-color:#4E9231;
+}
 #header {
   background-color:#AA6339;
   color:#FFCAAA;
 }
 #content {
-  background-color:#748BA7;
+  background-color:#FFFFCC;
   color:black;
 }
 #footer {
   background-color:#051B38;
   color:#748BA7;
 }
-a {
-  color:black;
+code {
+  background-color:white;
+  color:#2C4970;
 }
 
 /* Other CSS */
@@ -50,6 +54,16 @@ a {
 
 table {
   width:100%;
+  border-style:solid;
+  border-width:thin
+}
+td, th {
+  padding:2px;
+  border-style:solid;
+  border-width:thin;
+}
+td {
+  text-align:center;
 }
 
 html, body {
@@ -86,4 +100,7 @@ html, body {
 
 #xpathform {
   padding-top:15px;
+}
+code {
+  font-size:100%;
 }
