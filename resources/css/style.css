@@ -53,8 +53,12 @@ code {
 }*/
 .xmldoc {
   color:#803D16;
-  font-size:95%;
+  font-size:10pt;
   font-family:'Menlo,Monaco,Consolas,"Courier New",monospace';
+}
+
+.tab-content {
+  padding:10px;
 }
 
 table {
