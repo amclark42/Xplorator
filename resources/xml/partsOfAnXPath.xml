@@ -141,11 +141,11 @@
       number of "code" elements within each paragraph. Here's one process for 
       constructing a query:</mtx:cr>
     <mtx:ne xml:id="d1e269">
-      <mtx:mn xml:id="d1e271">Get all code elements... <mtx:fe xml:id="d1e273">//code</mtx:fe></mtx:mn>
-      <mtx:mn xml:id="d1e276">Count all code elements... <mtx:fe xml:id="d1e278">count(//code)</mtx:fe></mtx:mn>
-      <mtx:mn xml:id="d1e281">Get all paragraph elements... <mtx:fe xml:id="d1e283">//p</mtx:fe></mtx:mn>
-      <mtx:mn xml:id="d1e286">Get all paragraphs with at least one child named "code"... <mtx:fe xml:id="d1e288">//p/code</mtx:fe></mtx:mn>
-      <mtx:mn xml:id="d1e291">For each paragraph, count child codes... <mtx:fe xml:id="d1e293">//p/count(code)</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e271">Get all code elements... <mtx:fe xml:id="d1e273">//mtx:fe</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e276">Count all code elements... <mtx:fe xml:id="d1e278">count(//mtx:fe)</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e281">Get all paragraph elements... <mtx:fe xml:id="d1e283">//mtx:cr</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e286">Get all paragraphs with at least one child named "code"... <mtx:fe xml:id="d1e288">//mtx:cr/mtx:fe</mtx:fe></mtx:mn>
+      <mtx:mn xml:id="d1e291">For each paragraph, count child codes... <mtx:fe xml:id="d1e293">//mtx:cr/count(mtx:fe)</mtx:fe></mtx:mn>
     </mtx:ne>
   </mtx:ti>
   

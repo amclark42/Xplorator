@@ -41,15 +41,20 @@ table, td, th {
   color:#748BA7;
 }
 code {
-  background-color:white;
-  color:#2C4970;
+  background-color:#FFCAAA;
+  color:black;
 }
 
 /* Other CSS */
 /* Thanks to Chris Bracco for this solution for placing the footer at the 
   bottom of the page. http://codepen.io/cbracco/pen/zekgx */
-.xmldoc {
+/*.xmldoc {
   display:none;
+}*/
+.xmldoc {
+  color:#803D16;
+  font-size:95%;
+  font-family:'Menlo,Monaco,Consolas,"Courier New",monospace';
 }
 
 table {
