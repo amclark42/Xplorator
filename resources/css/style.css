@@ -12,7 +12,10 @@
   .color-secondary-2-3 { color: #2E6E13 }
   .color-secondary-2-4 { color: #164900 }*/
 body {
-  font-family: "Gill Sans", "Gill Sans MT", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+ol {
+  padding-left: 1.5rem;
 }
 #viewer #document-node {
   padding: 1rem;
@@ -22,4 +25,5 @@ body {
 }
 #viewer #document-node li[data-node-type='comment'] {
   color: #2E6E13;
+  font-family: "Lucida Console", Monaco, monospace;
 }

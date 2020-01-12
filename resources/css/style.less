@@ -39,7 +39,8 @@
 
   //*  Fonts
 
-  @gillsans: "Gill Sans", "Gill Sans MT", Helvetica, Arial, sans-serif;
+  @sansserif: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  @monospace: "Lucida Console", Monaco, monospace;
 
 
 //*  MIXINS
@@ -48,7 +49,11 @@
 //*  STYLES
 
 body {
-  font-family: @gillsans;
+  font-family: @sansserif;
+}
+
+ol {
+  padding-left: 1.5rem;
 }
 
 #viewer {
@@ -61,6 +66,7 @@ body {
     
     li[data-node-type='comment'] {
       color: #2E6E13;
+      font-family: @monospace;
     }
   } // & #document-node
 } // #viewer
