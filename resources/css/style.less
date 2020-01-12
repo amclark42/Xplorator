@@ -1,0 +1,66 @@
+/* Xplorator styles */
+
+//*  VARIABLES
+
+  //*  Colors
+  
+  // Neutrals
+  @gray_darkest: rgb(45,45,44);
+  @gray_darker: rgb(89,90,89);
+  @gray_dark: rgb(134,135,133);
+  @gray_mid: rgb(157,157,155);
+  @gray_light: rgb(179,180,177);
+  @gray_lighter: rgb(224,225,222);
+  @gray_lightest: rgb(246,247,244);
+  @faded_page: #f9f7f4;
+  @faded_page_dark: #f0ebe3;
+  @faded_page_darker: #e7dfd3;
+  @offwhite: rgb(255,255,254);
+  
+  @rust_lightest: #FFCAAA;
+  @rust_lighter: #D4926A;
+  @rust: #AA6339;
+  @rust_darker: #803D16;
+  @rust_darkest: #552000;
+
+  /* Main secondary color (blue) */
+  /*.color-secondary-1-1 { color: #748BA7 }
+  .color-secondary-1-2 { color: #4C678B }
+  .color-secondary-1-0 { color: #2C4970 }
+  .color-secondary-1-3 { color: #143054 }
+  .color-secondary-1-4 { color: #051B38 }*/
+
+  /* Main secondary color (green) */
+  /*.color-secondary-2-1 { color: #A8DB92 }
+  .color-secondary-2-2 { color: #77B65B }
+  .color-secondary-2-0 { color: #4E9231 }
+  .color-secondary-2-3 { color: #2E6E13 }
+  .color-secondary-2-4 { color: #164900 }*/
+
+  //*  Fonts
+
+  @gillsans: "Gill Sans", "Gill Sans MT", Helvetica, Arial, sans-serif;
+
+
+//*  MIXINS
+  
+
+//*  STYLES
+
+body {
+  font-family: @gillsans;
+}
+
+#viewer {
+  
+  #document-node {
+    padding: 1rem;
+    list-style-position: inside;
+    list-style-type: none;
+    background-color: @faded_page;
+    
+    li[data-node-type='comment'] {
+      color: #2E6E13;
+    }
+  } // & #document-node
+} // #viewer

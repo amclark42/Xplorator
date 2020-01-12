@@ -1,26 +1,45 @@
-/*!  */
+// xplorator.js
 
-/*$('#tabbasics a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
-});*/
-$('#tabparts a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
-});
-$('#tabwhy a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
-});
+// Set up Xplorator namespace.
+var xplr = xplr || {};
+//xplr.subns = {};
 
-/*$('#tabbasics a[href="#basics"]').tab('show')*/
-$('#tabparts a[href="#parts"]').tab('show')
-$('#tabwhy a[href="#why"]').tab('show')
+// Create an anonymous function to hold functions to be namespaced.
+(function() {
+  /* Capture the current context so these functions can refer to themselves even 
+    when the context changes. */
+  var that = this;
+  
+  /*** Private functions ***/
+  
+  var getSurrogate = function (htmlid) { };
+  
+  
+  /*** Public functions ***/
+  
+  this.clearTextChildren = function (htmlid) { };
+  
+  
+  /*** Class definitions ***/
+  
+  this.MenuOption = class {
+    constructor () { }
+  };
+}).apply(xplr); // Apply the namespace to the anonymous function.
 
-$('.result-btn button').on('click', function () {
-  /*var $btn = $(this).button('loading')*/
-  /* Whenever a result-btn is pressed, use toggleClass to highlight the element with the @id matching @data-target. */
-  var $tgt = $(this).button.getAttribute('data-target')
-  document.getElementById(tgt).toggleClass('highlight')
-  $(this).button('&lt;')
-})
+
+// Create a callback function to be run when the entire document has loaded.
+var onLoad = function() {
+  console.log("Do something");
+};
+
+/* Ensure that the callback function above is run, whether or not the DOM has 
+  already been loaded. Solution by Julian Kühnel: 
+  https://www.sitepoint.com/jquery-document-ready-plain-javascript/ */
+if ( document.readyState === 'complete' 
+   || ( document.readyState !== 'loading' && !document.documentElement.doScroll ) 
+   ) {
+  onLoad();
+} else {
+  document.addEventListener('DOMContentLoaded', onLoad);
+}

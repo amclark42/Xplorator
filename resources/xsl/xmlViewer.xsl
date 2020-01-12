@@ -24,11 +24,14 @@
   <!--  IDENTITY TEMPLATES  -->
   
   <xsl:template match="*" mode="#all">
-    <span>
+    <xsl:variable name="isList" select="not(empty(node()))"/>
+    <li>
       <xsl:call-template name="element-data"/>
       <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:apply-templates mode="#current"/>
-    </span>
+      <ol>
+        <xsl:apply-templates mode="#current"/>
+      </ol>
+    </li>
   </xsl:template>
   
   <!-- Attributes become HTML data attributes. -->
@@ -46,8 +49,20 @@
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="text() | comment() | processing-instruction()" mode="#all">
-    <xsl:copy/>
+  <xsl:template match="text()" mode="#all">
+    <li>
+      <xsl:attribute name="data-node-type" select="'text'"/>
+      <xsl:copy/>
+    </li>
+  </xsl:template>
+  
+  <xsl:template match="comment()" mode="#all">
+    <li>
+      <xsl:attribute name="data-node-type" select="'comment'"/>
+      <xsl:text><![CDATA[<!--]]></xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text><![CDATA[-->]]></xsl:text>
+    </li>
   </xsl:template>
   
   
@@ -56,20 +71,26 @@
   <xsl:template match="/">
     <xsl:variable name="content">
       <div id="viewer">
-        <xsl:apply-templates/>
+        <ol id="document-node">
+          <xsl:apply-templates select="node()"/>
+        </ol>
       </div>
     </xsl:variable>
     <xsl:choose>
+      <!-- In standalone mode, build an HTML document around the representation of the XML document. -->
       <xsl:when test="$standalone">
-        <html>
+        <html lang="en">
           <head>
-            
+            <link rel="stylesheet" href="resources/css/style.css"></link>
+            <script src="https://d3js.org/d3.v5.min.js"></script>
+            <script src="resources/scripts/xplorator.js"></script>
           </head>
           <body>
             <xsl:copy-of select="$content"/>
           </body>
         </html>
       </xsl:when>
+      <!-- By default, simply output the <div> container. -->
       <xsl:otherwise>
         <xsl:copy-of select="$content"/>
       </xsl:otherwise>
@@ -93,6 +114,10 @@
     <xsl:attribute name="data-axis-children">
       <xsl:value-of select="as:list-nodes(node())"/>
     </xsl:attribute>
+  </xsl:template>
+  
+  <xsl:template name="node-label">
+    <span class="node-label"></span>
   </xsl:template>
   
   
