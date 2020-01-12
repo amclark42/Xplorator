@@ -40,11 +40,15 @@
   //*  Fonts
 
   @sansserif: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  @monospace: "Lucida Console", Monaco, monospace;
+  @monospace: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
 
 
 //*  MIXINS
-  
+
+  .code() {
+    font-family: @monospace;
+    font-size: 1.15rem;
+  }
 
 //*  STYLES
 
@@ -66,7 +70,7 @@ ol {
     
     li[data-node-type='comment'] {
       color: #2E6E13;
-      font-family: @monospace;
+      .code();
     }
   } // & #document-node
 } // #viewer

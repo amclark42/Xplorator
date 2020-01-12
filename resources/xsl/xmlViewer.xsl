@@ -81,6 +81,7 @@
       <xsl:when test="$standalone">
         <html lang="en">
           <head>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap"></link>
             <link rel="stylesheet" href="resources/css/style.css"></link>
             <script src="https://d3js.org/d3.v5.min.js"></script>
             <script src="resources/scripts/xplorator.js"></script>

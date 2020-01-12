@@ -25,5 +25,6 @@ ol {
 }
 #viewer #document-node li[data-node-type='comment'] {
   color: #2E6E13;
-  font-family: "Lucida Console", Monaco, monospace;
+  font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
+  font-size: 1.15rem;
 }
