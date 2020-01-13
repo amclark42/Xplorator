@@ -22,19 +22,46 @@ ol {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
+ol li {
+  margin-top: 0.15rem;
+}
 #viewer #document-node {
   padding: 1rem;
-  list-style-type: none;
   background-color: #f9f7f4;
+  list-style-type: none;
 }
 #viewer #document-node .node-label {
-  margin: 0.15rem;
+  margin: auto;
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
   background-color: #ffcaaa;
+}
+#viewer #document-node ol {
+  list-style-type: none;
+}
+#viewer #document-node li[data-gi]:after {
+  content: "</" attr(data-gi) ">";
+  display: inline-block;
+  margin: auto;
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.15rem;
+  background-color: #ffcaaa;
+  font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
+  font-size: 1.15rem;
 }
 #viewer #document-node li[data-node-type='comment'] {
   color: #2E6E13;
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
+}
+#viewer #document-node li[data-node-type='text']:before,
+#viewer #document-node li[data-node-type='text']:after {
+  color: #aa6339;
+  font-size: 1.25em;
+}
+#viewer #document-node li[data-node-type='text']:before {
+  content: "“";
+}
+#viewer #document-node li[data-node-type='text']:after {
+  content: "”";
 }

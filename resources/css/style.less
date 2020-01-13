@@ -59,25 +59,59 @@ body {
 ol {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
-}
+  
+  li {
+    margin-top: 0.15rem;
+  }
+} // ol
 
 #viewer {
   
   #document-node {
     padding: 1rem;
-    list-style-type: none;
     background-color: @faded_page;
+    list-style-type: none;
     
     .node-label {
-      margin: 0.15rem;
+      margin: auto;
       border-radius: 0.5rem;
       padding: 0.1rem 0.15rem;
       background-color: @rust_lightest;
+    }
+    
+    ol {
+      list-style-type: none;
+    }
+    
+    li[data-gi] {
+      
+      &:after {
+        content: "</" attr(data-gi) ">";
+        display: inline-block;
+        .node-label();
+        .code();
+      }
     }
     
     li[data-node-type='comment'] {
       color: #2E6E13;
       .code();
     }
+    
+    li[data-node-type='text'] {
+      
+      &:before, &:after {
+        color: @rust;
+        font-size: 1.25em;
+      }
+      
+      &:before {
+        content: "“";
+      }
+      
+      &:after {
+        content: "”";
+      }
+    } // #viewer #document-node li[data-node-type='type']
   } // & #document-node
 } // #viewer
