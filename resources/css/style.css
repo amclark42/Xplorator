@@ -11,17 +11,27 @@
   .color-secondary-2-0 { color: #4E9231 }
   .color-secondary-2-3 { color: #2E6E13 }
   .color-secondary-2-4 { color: #164900 }*/
+.code {
+  font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
+  font-size: 1.15rem;
+}
 body {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 ol {
+  margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
 #viewer #document-node {
   padding: 1rem;
-  list-style-position: inside;
   list-style-type: none;
   background-color: #f9f7f4;
+}
+#viewer #document-node .node-label {
+  margin: 0.15rem;
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.15rem;
+  background-color: #ffcaaa;
 }
 #viewer #document-node li[data-node-type='comment'] {
   color: #2E6E13;

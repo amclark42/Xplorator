@@ -45,7 +45,7 @@
 
 //*  MIXINS
 
-  .code() {
+  .code {
     font-family: @monospace;
     font-size: 1.15rem;
   }
@@ -57,6 +57,7 @@ body {
 }
 
 ol {
+  margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
 
@@ -64,9 +65,15 @@ ol {
   
   #document-node {
     padding: 1rem;
-    list-style-position: inside;
     list-style-type: none;
     background-color: @faded_page;
+    
+    .node-label {
+      margin: 0.15rem;
+      border-radius: 0.5rem;
+      padding: 0.1rem 0.15rem;
+      background-color: @rust_lightest;
+    }
     
     li[data-node-type='comment'] {
       color: #2E6E13;

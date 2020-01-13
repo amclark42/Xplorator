@@ -28,6 +28,7 @@
     <li>
       <xsl:call-template name="element-data"/>
       <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:call-template name="node-labels"/>
       <ol>
         <xsl:apply-templates mode="#current"/>
       </ol>
@@ -117,8 +118,15 @@
     </xsl:attribute>
   </xsl:template>
   
-  <xsl:template name="node-label">
-    <span class="node-label"></span>
+  <!-- Create human-readable labels for this node's HTML representation. -->
+  <xsl:template name="node-labels">
+    <span class="container">
+      <span class="code node-label">
+        <xsl:text>&lt;</xsl:text>
+        <xsl:value-of select="name()"/>
+        <xsl:text>&gt;</xsl:text>
+      </span>
+    </span>
   </xsl:template>
   
   
