@@ -18,7 +18,7 @@ var xplr = xplr || {};
     var regexStep, match, ns,
         stepInfo = {};
     regexStep =
-      /^\/(?<axis>\/)?\s?(?<gi>(?:(?<prefix>\w+):)?[_\p{Letter}][\w_\.-]*)/u;
+      /^\/(?<axis>\/)?\s?(?<gi>(?:(?<prefix>\w+|\*):)?[_\p{Letter}][\w_\.-]*)/u;
     match = regexStep.exec(xpath);
     // Recover from a string that doesn't match expectations about XPath.
     if ( match === null ) {
@@ -37,8 +37,8 @@ var xplr = xplr || {};
   }; // identifyStep()
   
   /* A Javascript version of XPath's fn:normalize-space(). Whitespace is deleted 
-    from the beginning and end of the given string. Whitespace elsewhere in the 
-    string is reduced to a single space.  */
+    from the beginning and end of the given string. Whitespace characters elsewhere 
+    in the string is reduced to a single space.  */
   var normalizeSpace = function(str) {
     var trimmedStr,
         regexWsBetween = /\s{2,}/g,
@@ -61,16 +61,34 @@ var xplr = xplr || {};
   
   /*** Class definitions ***/
   
-  this.XmlDoc = class {
-    constructor () { }
-  };
+  this.XmlNode = class {
+    constructor (node) {
+      this.node = node;
+      this.data = node.dataset;
+    }
+    
+    get nodeType() {
+      return this.data.nodeType;
+    }
+  }; // this.XmlNode
+  
+  this.Doc = class extends this.XmlNode {
+    
+  }; // this.Doc
+  
+  this.ElNode = class extends this.XmlNode {
+    
+  }; // this.ElNode
 }).apply(xplr); // Apply the namespace to the anonymous function.
 
 
 // Create a callback function to be run when the entire document has loaded.
 var onLoad = function() {
-  var test = xplr.execute("/mtx:sc/mtx:ti//mtx:fe");
+  var docNode = document.getElementById('document-node'),
+      doc = new xplr.Doc(docNode),
+      test = xplr.execute("/mtx:sc/mtx:ti//mtx:fe");
   console.log(test);
+  console.log(doc);
 };
 
 /* Ensure that the callback function above is run, whether or not the DOM has 

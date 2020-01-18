@@ -73,6 +73,7 @@
     <xsl:variable name="content">
       <div id="viewer">
         <ol id="document-node">
+          <xsl:attribute name="data-node-type" select="'document-node'"/>
           <xsl:apply-templates select="node()"/>
         </ol>
       </div>
