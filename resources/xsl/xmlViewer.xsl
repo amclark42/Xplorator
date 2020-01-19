@@ -27,6 +27,8 @@
     <xsl:variable name="isList" select="not(empty(node()))"/>
     <li>
       <xsl:call-template name="element-data"/>
+      <xsl:call-template name="axis-parent"/>
+      <xsl:call-template name="axis-children"/>
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:call-template name="node-labels"/>
       <ol>
@@ -52,14 +54,14 @@
   
   <xsl:template match="text()" mode="#all">
     <li>
-      <xsl:attribute name="data-node-type" select="'text'"/>
+      <xsl:attribute name="data-node-type" select="'text()'"/>
       <xsl:copy/>
     </li>
   </xsl:template>
   
   <xsl:template match="comment()" mode="#all">
     <li>
-      <xsl:attribute name="data-node-type" select="'comment'"/>
+      <xsl:attribute name="data-node-type" select="'comment()'"/>
       <xsl:text><![CDATA[<!--]]></xsl:text>
       <xsl:value-of select="."/>
       <xsl:text><![CDATA[-->]]></xsl:text>
@@ -73,7 +75,8 @@
     <xsl:variable name="content">
       <div id="viewer">
         <ol id="document-node">
-          <xsl:attribute name="data-node-type" select="'document-node'"/>
+          <xsl:attribute name="data-node-type" select="'document-node()'"/>
+          <xsl:call-template name="axis-children"/>
           <xsl:apply-templates select="node()"/>
         </ol>
       </div>
@@ -103,20 +106,29 @@
   
   <!--  NAMED TEMPLATES  -->
   
+  <!-- Identify the current node's children. -->
+  <xsl:template name="axis-children">
+    <xsl:variable name="children" 
+      select="( node() | comment() | processing-instruction() )"/>
+    <xsl:attribute name="data-axis-children">
+      <xsl:value-of select="as:list-nodes($children)"/>
+    </xsl:attribute>
+  </xsl:template>
+  
+  <!-- Identify the current node's parent. -->
+  <xsl:template name="axis-parent">
+    <xsl:attribute name="data-axis-parent" select="parent::*/name()"/>
+  </xsl:template>
+  
   <!-- Create some data attributes with information about the XML element. -->
   <xsl:template name="element-data">
     <xsl:variable name="myNamespace" select="namespace-uri()"/>
-    <xsl:variable name="myParent" select="parent::*"/>
     <xsl:attribute name="data-gi" select="name()"/>
     <!-- Don't bother listing the namespace URI unless it differs from this element's parent's 
       namespace URI. -->
-    <xsl:if test="$myNamespace ne namespace-uri($myParent)">
+    <xsl:if test="$myNamespace ne namespace-uri(parent::*)">
       <xsl:attribute name="data-ns" select="namespace-uri()"/>
     </xsl:if>
-    <xsl:attribute name="data-axis-parent" select="$myParent/name()"/>
-    <xsl:attribute name="data-axis-children">
-      <xsl:value-of select="as:list-nodes(node())"/>
-    </xsl:attribute>
   </xsl:template>
   
   <!-- Create human-readable labels for this node's HTML representation. -->
@@ -142,6 +154,12 @@
         <xsl:choose>
           <xsl:when test="self::*">
             <xsl:value-of select="name()"/>
+          </xsl:when>
+          <xsl:when test="self::comment()">
+            <xsl:text>comment()</xsl:text>
+          </xsl:when>
+          <xsl:when test="self::processing-instruction()">
+            <xsl:text>processing-instruction()</xsl:text>
           </xsl:when>
           <xsl:when test="self::text()">
             <xsl:text>text()</xsl:text>

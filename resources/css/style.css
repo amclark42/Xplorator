@@ -49,19 +49,19 @@ ol li {
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
 }
-#viewer #document-node li[data-node-type='comment'] {
+#viewer #document-node li[data-node-type='comment()'] {
   color: #2E6E13;
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
 }
-#viewer #document-node li[data-node-type='text']:before,
-#viewer #document-node li[data-node-type='text']:after {
+#viewer #document-node li[data-node-type='text()']:before,
+#viewer #document-node li[data-node-type='text()']:after {
   color: #aa6339;
   font-size: 1.25em;
 }
-#viewer #document-node li[data-node-type='text']:before {
+#viewer #document-node li[data-node-type='text()']:before {
   content: "“";
 }
-#viewer #document-node li[data-node-type='text']:after {
+#viewer #document-node li[data-node-type='text()']:after {
   content: "”";
 }
