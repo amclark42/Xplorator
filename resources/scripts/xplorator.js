@@ -14,12 +14,12 @@ var xplr = xplr || {};
   /*** Private functions ***/
   
   /*  */
-  var classifyNode = function(node) {
+  var classifyNode = function(el, ns) {
     var classedNode = null;
-    if ( isElementProxy(node) ) {
-      classedNode = new that.ElNode(node);
-    } else if ( isNodeProxy(node) ) {
-      classedNode = new that.XmlNode(node);
+    if ( isElementProxy(el) ) {
+      classedNode = new that.ElNode(el, ns);
+    } else if ( isNodeProxy(el) ) {
+      classedNode = new that.XmlNode(el);
     }
     return classedNode;
   }; // classifyNode
@@ -27,10 +27,10 @@ var xplr = xplr || {};
   /*  */
   var getChildren = function(el, callback, context) {
     if ( el.hasChildNodes() ) {
-      var childSeq = el.childNodes;
-      childSeq.forEach(callback, context);
+      var children = el.childNodes;
+      children.forEach(callback, context);
     }
-    return childSeq;
+    return children;
   }; // getChildren()
   
   /* Detemine if a given HTML element is serving as a proxy for an XML element node. */
@@ -94,7 +94,7 @@ var xplr = xplr || {};
     
     step(node) {
       var candidates = node.getAxis(this.axis);
-      //candidates.filter(this.test, this);
+      candidates = candidates.filter(this.test, this);
       console.log(candidates);
     } // pathStep.step()
     
@@ -105,9 +105,9 @@ var xplr = xplr || {};
   }; // this.PathStep
   
   this.XmlNode = class {
-    constructor (node) {
-      var data = node.dataset;
-      this.node = node;
+    constructor (el) {
+      var data = el.dataset;
+      this.el = el;
       this.types = ['node()'];
       if ( data.nodeType !== undefined ) {
         this.types.unshift(data.nodeType);
@@ -121,7 +121,7 @@ var xplr = xplr || {};
     
     getAxis(step) {
       var moveTo;
-      switch (step.axis) {
+      switch (step) {
         case 'self':
           moveTo = this;
           break;
@@ -130,18 +130,18 @@ var xplr = xplr || {};
           moveTo = this.children;
           break;
         default:
-          console.log(step.axis);
+          console.log(step);
       }
       return moveTo;
     } // xmlNode.getAxis()
   }; // this.XmlNode
   
   this.Doc = class extends this.XmlNode {
-    constructor (node) {
-      super(node);
+    constructor (el) {
+      super(el);
       this.children = [];
       // Identify child XML proxies, and create classes for them.
-      getChildren(node, function(child) {
+      getChildren(el, function(child) {
         var classedChild = classifyNode(child);
         if ( classedChild !== null ) {
           this.children.push(classedChild);
@@ -151,22 +151,22 @@ var xplr = xplr || {};
   }; // this.Doc
   
   this.ElNode = class extends this.XmlNode {
-    constructor(node, namespace) {
-      super(node);
-      this.gi = node.dataset.gi;
-      this.namespace = node.dataset.ns || namespace || null;
+    constructor(el, namespace) {
+      super(el);
+      this.gi = el.dataset.gi;
+      this.namespace = el.dataset.ns || namespace || null;
       this.children = [];
       /* Identify the child XML proxies inside a node container <ol>, and create 
         classes for them. */
       var nodeContainer;
-      for (var el of node.children) {
-        if ( el.localName === 'ol' && el.className === 'node-container' ) {
-          nodeContainer = el;
+      for (var elChild of el.children) {
+        if ( elChild.localName === 'ol' && elChild.className === 'node-container' ) {
+          nodeContainer = elChild;
         }
       }
       if ( nodeContainer !== undefined ) {
-        getChildren(nodeContainer, function(liChild) {
-          var classedChild = classifyNode(liChild);
+        getChildren(nodeContainer, function(elChild) {
+          var classedChild = classifyNode(elChild, this.namespace);
           if ( classedChild !== null ) {
             this.children.push(classedChild);
           }
