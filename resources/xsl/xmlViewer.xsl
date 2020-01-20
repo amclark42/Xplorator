@@ -31,7 +31,7 @@
       <xsl:call-template name="axis-children"/>
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:call-template name="node-labels"/>
-      <ol>
+      <ol class="node-container">
         <xsl:apply-templates mode="#current"/>
       </ol>
     </li>
@@ -74,7 +74,7 @@
   <xsl:template match="/">
     <xsl:variable name="content">
       <div id="viewer">
-        <ol id="document-node">
+        <ol id="document-node" class="node-container">
           <xsl:attribute name="data-node-type" select="'document-node()'"/>
           <xsl:call-template name="axis-children"/>
           <xsl:apply-templates select="node()"/>

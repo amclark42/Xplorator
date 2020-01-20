@@ -13,28 +13,35 @@ var xplr = xplr || {};
   
   /*** Private functions ***/
   
-  /* Given a string assumed to be XPath, determine the next step of the query. */
-  var identifyStep = function(xpath) {
-    var regexStep, match, ns,
-        stepInfo = {};
-    regexStep =
-      /^\/(?<axis>\/)?\s?(?<gi>(?:(?<prefix>\w+|\*):)?[_\p{Letter}][\w_\.-]*)/u;
-    match = regexStep.exec(xpath);
-    // Recover from a string that doesn't match expectations about XPath.
-    if ( match === null ) {
-      stepInfo['msg'] = {
-          'type': 'error',
-          'say': "Cannot parse string '"+xpath+"' as XPath."
-        };
-    } else {
-      stepInfo['axis'] = match.groups.axis || 'child';
-      if ( stepInfo.axis === '/' ) {
-        stepInfo['axis'] = 'descendant';
-      }
-      stepInfo['gi'] = match.groups.gi;
+  /*  */
+  var classifyNode = function(node) {
+    var classedNode = null;
+    if ( isElementProxy(node) ) {
+      classedNode = new that.ElNode(node);
+    } else if ( isNodeProxy(node) ) {
+      classedNode = new that.XmlNode(node);
     }
-    return stepInfo;
-  }; // identifyStep()
+    return classedNode;
+  }; // classifyNode
+  
+  /*  */
+  var getChildren = function(el, callback, context) {
+    if ( el.hasChildNodes() ) {
+      var childSeq = el.childNodes;
+      childSeq.forEach(callback, context);
+    }
+    return childSeq;
+  }; // getChildren()
+  
+  /* Detemine if a given HTML element is serving as a proxy for an XML element node. */
+  var isElementProxy = function(el) {
+    return el.hasAttribute("data-gi");
+  }; // isElementProxy()
+  
+  /* Detemine if a given HTML element is serving as a proxy for an XML node. */
+  var isNodeProxy = function(el) {
+    return el.hasAttribute("data-node-type") || isElementProxy(el);
+  }; // isNodeProxy()
   
   /* A Javascript version of XPath's fn:normalize-space(). Whitespace is deleted 
     from the beginning and end of the given string. Whitespace characters elsewhere 
@@ -101,18 +108,12 @@ var xplr = xplr || {};
     constructor (node) {
       var data = node.dataset;
       this.node = node;
-      this.gi = data.gi;
       this.types = ['node()'];
       if ( data.nodeType !== undefined ) {
         this.types.unshift(data.nodeType);
       }
+      this.children = null;
     }
-    
-    /* Since not every node type can have children, the "children" property is a 
-      no-op for this generic class. */
-    get children() {
-      return undefined;
-    } // xmlNode.children
     
     get nodeType() {
       return this.types[0];
@@ -138,12 +139,40 @@ var xplr = xplr || {};
   this.Doc = class extends this.XmlNode {
     constructor (node) {
       super(node);
-      
+      this.children = [];
+      // Identify child XML proxies, and create classes for them.
+      getChildren(node, function(child) {
+        var classedChild = classifyNode(child);
+        if ( classedChild !== null ) {
+          this.children.push(classedChild);
+        }
+      }, this)
     }
   }; // this.Doc
   
   this.ElNode = class extends this.XmlNode {
-    
+    constructor(node, namespace) {
+      super(node);
+      this.gi = node.dataset.gi;
+      this.namespace = node.dataset.ns || namespace || null;
+      this.children = [];
+      /* Identify the child XML proxies inside a node container <ol>, and create 
+        classes for them. */
+      var nodeContainer;
+      for (var el of node.children) {
+        if ( el.localName === 'ol' && el.className === 'node-container' ) {
+          nodeContainer = el;
+        }
+      }
+      if ( nodeContainer !== undefined ) {
+        getChildren(nodeContainer, function(liChild) {
+          var classedChild = classifyNode(liChild);
+          if ( classedChild !== null ) {
+            this.children.push(classedChild);
+          }
+        }, this);
+      }
+    }
   }; // this.ElNode
 }).apply(xplr); // Apply the namespace to the anonymous function.
 
