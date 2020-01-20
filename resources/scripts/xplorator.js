@@ -50,30 +50,96 @@ var xplr = xplr || {};
   
   /*** Public functions ***/
   
-  /* Run a given XPath. */
-  this.execute = function(xpath) {
-    var normStr = normalizeSpace(xpath),
-        step1 = identifyStep(normStr);
-    console.log(normStr);
-    return step1;
-  }; // this.execute()
-  
   
   /*** Class definitions ***/
   
-  this.XmlNode = class {
-    constructor (node) {
-      this.node = node;
-      this.data = node.dataset;
+  this.PathStep = class {
+    constructor (xpath) {
+      var regexStep, match, ns,
+          useXPath = normalizeSpace(xpath);
+      regexStep =
+        /^\/(?<axis>\/)?\s?(?<gi>(?:(?<prefix>\w+|\*):)?[_\p{Letter}][\w_\.-]*)/u;
+      match = regexStep.exec(useXPath);
+      //console.log(match);
+      this.remainder = useXPath.slice(match[0].length);
+      // Recover from a string that doesn't match expectations about XPath.
+      if ( match === null ) {
+        this.msg = {
+            'type': 'error',
+            'say': "Cannot parse string '"+xpath+"' as XPath."
+          };
+      } else {
+        this.axis = match.groups.axis || 'child';
+        if ( this.axis === '/' ) {
+          this.axis = 'descendant';
+        }
+        this.gi = match.groups.gi;
+      }
     }
     
-    get nodeType() {
-      return this.data.nodeType;
+    get next() {
+      var expr = null;
+      if ( this.remainder !== '' ) {
+        expr = new that.PathStep(this.remainder);
+      }
+      return expr;
+    } // pathStep.next
+    
+    step(node) {
+      var candidates = node.getAxis(this.axis);
+      //candidates.filter(this.test, this);
+      console.log(candidates);
+    } // pathStep.step()
+    
+    test(node) {
+      var giMatch = this.gi === node.gi;
+      return giMatch;
     }
+  }; // this.PathStep
+  
+  this.XmlNode = class {
+    constructor (node) {
+      var data = node.dataset;
+      this.node = node;
+      this.gi = data.gi;
+      this.types = ['node()'];
+      if ( data.nodeType !== undefined ) {
+        this.types.unshift(data.nodeType);
+      }
+    }
+    
+    /* Since not every node type can have children, the "children" property is a 
+      no-op for this generic class. */
+    get children() {
+      return undefined;
+    } // xmlNode.children
+    
+    get nodeType() {
+      return this.types[0];
+    } // xmlNode.nodeType
+    
+    getAxis(step) {
+      var moveTo;
+      switch (step.axis) {
+        case 'self':
+          moveTo = this;
+          break;
+        case 'child':
+        //case 'descendant':
+          moveTo = this.children;
+          break;
+        default:
+          console.log(step.axis);
+      }
+      return moveTo;
+    } // xmlNode.getAxis()
   }; // this.XmlNode
   
   this.Doc = class extends this.XmlNode {
-    
+    constructor (node) {
+      super(node);
+      
+    }
   }; // this.Doc
   
   this.ElNode = class extends this.XmlNode {
@@ -86,9 +152,10 @@ var xplr = xplr || {};
 var onLoad = function() {
   var docNode = document.getElementById('document-node'),
       doc = new xplr.Doc(docNode),
-      test = xplr.execute("/mtx:sc/mtx:ti//mtx:fe");
-  console.log(test);
+      xpath = new xplr.PathStep("/mtx:sc/mtx:ti//mtx:fe");
+  console.log(xpath);
   console.log(doc);
+  xpath.step(doc);
 };
 
 /* Ensure that the callback function above is run, whether or not the DOM has 
