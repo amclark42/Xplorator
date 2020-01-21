@@ -92,6 +92,9 @@
             <script src="resources/scripts/xplorator.js"></script>
           </head>
           <body>
+            <div id="controller">
+              <button name="step">Next step</button>
+            </div>
             <xsl:copy-of select="$content"/>
           </body>
         </html>

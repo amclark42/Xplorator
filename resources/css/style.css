@@ -16,6 +16,7 @@
   font-size: 1.15rem;
 }
 body {
+  background-color: white;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 ol {
@@ -24,6 +25,25 @@ ol {
 }
 ol li {
   margin-top: 0.15rem;
+}
+button {
+  border: medium outset #aa6339;
+  border-radius: 0.25rem;
+  background-color: #803d16;
+  color: #fffffe;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+button:active {
+  border-style: inset;
+}
+#controller {
+  padding: 1rem 0 0.5rem;
+  top: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: inherit;
 }
 #viewer #document-node {
   padding: 1rem;

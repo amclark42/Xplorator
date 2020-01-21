@@ -102,7 +102,7 @@ var xplr = xplr || {};
       var giMatch = this.gi === node.gi;
       return giMatch;
     }
-  }; // this.PathStep
+  }; // PathStep
   
   this.XmlNode = class {
     constructor (el) {
@@ -134,7 +134,7 @@ var xplr = xplr || {};
       }
       return moveTo;
     } // xmlNode.getAxis()
-  }; // this.XmlNode
+  }; // XmlNode
   
   this.Doc = class extends this.XmlNode {
     constructor (el) {
@@ -148,11 +148,12 @@ var xplr = xplr || {};
         }
       }, this)
     }
-  }; // this.Doc
+  }; // Doc
   
   this.ElNode = class extends this.XmlNode {
     constructor(el, namespace) {
       super(el);
+      this.types.unshift('element()');
       this.gi = el.dataset.gi;
       this.namespace = el.dataset.ns || namespace || null;
       this.children = [];
@@ -173,7 +174,7 @@ var xplr = xplr || {};
         }, this);
       }
     }
-  }; // this.ElNode
+  }; // ElNode
 }).apply(xplr); // Apply the namespace to the anonymous function.
 
 

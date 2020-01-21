@@ -53,6 +53,7 @@
 //*  STYLES
 
 body {
+  background-color: white;
   font-family: @sansserif;
 }
 
@@ -64,6 +65,28 @@ ol {
     margin-top: 0.15rem;
   }
 } // ol
+
+button {
+  border: medium outset @rust;
+  border-radius: 0.25rem;
+  background-color: @rust_darker;
+  color: @offwhite;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  
+  &:active {
+    border-style: inset;
+  }
+} // button
+
+#controller {
+  padding: 1rem 0 0.5rem;
+  top: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: inherit;
+}
 
 #viewer {
   
