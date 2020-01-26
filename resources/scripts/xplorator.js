@@ -58,20 +58,37 @@ var xplr = xplr || {};
   /*** Public functions ***/
   
   
+  
   /*** Class definitions ***/
   
   this.Dispatcher = class {
     constructor(root) {
       this.node = root;
+      this.xpath = null;
       this.queue = [];
     }
     
-    play() {
-      var xpath,
-          form = d3.select(d3.event.target.parentNode);
-      xpath = form.select('#xpath-code').property('value');
-      console.log(xpath);
-    } // dispatcher.play()
+    manageQueue(e) {
+      var xpathReq,
+          form = d3.select(e.target.parentNode);
+      xpathReq = form.select('#xpath-code').property('value');
+      /* If the event indicates a new XPath has been input, clear the queue. */
+      if ( xpathReq !== this.xpath ) {
+        this.queue = [];
+      }
+      this.xpath = xpathReq;
+      /* Is the queue empty? If so, generate a new PathStep. */
+      if ( this.queue.length === 0 ) {
+        this.queue.push(new that.PathStep(this.xpath));
+      } else {
+        var prev = this.queue[this.queue.length - 1],
+            next = prev.next;
+        if ( next !== null ) {
+          this.queue.push(next);
+        }
+      }
+      console.log(this.queue);
+    } // dispatcher.manageQueue()
   }; // Dispatcher
   
   this.PathStep = class {
@@ -110,6 +127,7 @@ var xplr = xplr || {};
       var candidates = node.getAxis(this.axis);
       candidates = candidates.filter(this.test, this);
       console.log(candidates);
+      return candidates;
     } // pathStep.step()
     
     test(node) {
@@ -202,7 +220,10 @@ var onLoad = function() {
       testXPath = "/mtx:sc/mtx:ti//mtx:fe";
   console.log(doc);
   xCode.setRangeText(testXPath);
-  btnNext.on('click', dispatch.play);
+  btnNext.datum(dispatch)
+      .on('click', function() {
+        dispatch.manageQueue(d3.event);
+      });
 };
 
 /* Ensure that the callback function above is run, whether or not the DOM has 
