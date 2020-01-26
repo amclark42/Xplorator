@@ -93,7 +93,13 @@
           </head>
           <body>
             <div id="controller">
-              <button name="step">Next step</button>
+              <div role="form">
+                <div>
+                  <label for="xpath-code">XPath: </label>
+                  <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
+                </div>
+                <button name="step">Next step</button>
+              </div>
             </div>
             <xsl:copy-of select="$content"/>
           </body>

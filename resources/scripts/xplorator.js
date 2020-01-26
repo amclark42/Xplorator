@@ -60,6 +60,20 @@ var xplr = xplr || {};
   
   /*** Class definitions ***/
   
+  this.Dispatcher = class {
+    constructor(root) {
+      this.node = root;
+      this.queue = [];
+    }
+    
+    play() {
+      var xpath,
+          form = d3.select(d3.event.target.parentNode);
+      xpath = form.select('#xpath-code').property('value');
+      console.log(xpath);
+    } // dispatcher.play()
+  }; // Dispatcher
+  
   this.PathStep = class {
     constructor (xpath) {
       var regexStep, match, ns,
@@ -182,10 +196,13 @@ var xplr = xplr || {};
 var onLoad = function() {
   var docNode = document.getElementById('document-node'),
       doc = new xplr.Doc(docNode),
-      xpath = new xplr.PathStep("/mtx:sc/mtx:ti//mtx:fe");
-  console.log(xpath);
+      dispatch = new xplr.Dispatcher(doc),
+      xCode = document.getElementById('xpath-code'),
+      btnNext = d3.select('button[name="step"]'),
+      testXPath = "/mtx:sc/mtx:ti//mtx:fe";
   console.log(doc);
-  xpath.step(doc);
+  xCode.setRangeText(testXPath);
+  btnNext.on('click', dispatch.play);
 };
 
 /* Ensure that the callback function above is run, whether or not the DOM has 
