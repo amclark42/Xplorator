@@ -107,7 +107,7 @@ var xplr = xplr || {};
         console.log(elSeq);
         elSeq = d3.selectAll(elSeq)
           .select('.node-label')
-            .style('color', 'red');
+            .classed('expr-match', true);
         
       }
     } // dispatcher.stepInto()

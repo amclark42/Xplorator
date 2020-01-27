@@ -23,14 +23,14 @@
   @rust_darker: #803D16;
   @rust_darkest: #552000;
 
-  /* Main secondary color (blue) */
-  /*.color-secondary-1-1 { color: #748BA7 }
-  .color-secondary-1-2 { color: #4C678B }
-  .color-secondary-1-0 { color: #2C4970 }
-  .color-secondary-1-3 { color: #143054 }
-  .color-secondary-1-4 { color: #051B38 }*/
+  // Main secondary color (blue)
+  @stormy-sky-lightest: #748BA7;
+  @stormy-sky-lighter: #4C678B;
+  @stormy-sky: #2C4970;
+  @stormy-sky-darker: #143054;
+  @stormy-sky-darkest: #051B38;
 
-  /* Main secondary color (green) */
+  // Main secondary color (green)
   /*.color-secondary-2-1 { color: #A8DB92 }
   .color-secondary-2-2 { color: #77B65B }
   .color-secondary-2-0 { color: #4E9231 }
@@ -67,10 +67,10 @@ ol {
 } // ol
 
 button {
-  border: medium outset @rust;
+  border: medium outset @stormy-sky-lighter;
   border-radius: 0.25rem;
-  background-color: @rust_darker;
-  color: @offwhite;
+  background-color: @stormy-sky;
+  color: white;
   font-family: inherit;
   font-size: 0.9rem;
   cursor: pointer;
@@ -128,7 +128,12 @@ button {
       border-radius: 0.5rem;
       padding: 0.1rem 0.15rem;
       background-color: @rust_lightest;
-    }
+      
+      &.expr-match {
+        background-color: @stormy-sky-darker;
+        color: @rust_lightest;
+      }
+    } // #viewer #document-node .node-label
     
     ol {
       list-style-type: none;
