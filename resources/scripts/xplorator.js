@@ -66,6 +66,8 @@ var xplr = xplr || {};
       this.node = root;
       this.xpath = null;
       this.queue = [];
+      this.currentPlace = [];
+      this.currentPlace.push(this.node);
     }
     
     manageQueue(e) {
@@ -77,22 +79,42 @@ var xplr = xplr || {};
         this.queue = [];
       }
       this.xpath = xpathReq;
-      /* Is the queue empty? If so, generate a new PathStep. */
+      /* If the queue is empty, generate a new PathStep. */
       if ( this.queue.length === 0 ) {
-        this.queue.push(new that.PathStep(this.xpath));
-      } else {
-        var prev = this.queue[this.queue.length - 1],
-            next = prev.next;
+        this.queue.push(new that.PathStep(this.xpath, this.currentPlace));
+      /* If the current XPath expression is complete, remove it and get the next one. */
+      } else if ( this.queue[0].isComplete() ) {
+        var prev = this.queue.shift(),
+            next = prev.nextPath;
         if ( next !== null ) {
           this.queue.push(next);
         }
       }
-      console.log(this.queue);
+      console.log(this.queue[0]);
     } // dispatcher.manageQueue()
+    
+    stepInto(e) {
+      this.manageQueue(e);
+      if ( this.queue.length >= 1 ) {
+        var nodeStep = this.queue[0],
+            elSeq = [];
+        this.currentPlace = nodeStep.step(this.currentPlace);
+        if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
+          this.currentPlace.forEach( function(node) {
+            elSeq.push(node.el);
+          }, this);
+        }
+        console.log(elSeq);
+        elSeq = d3.selectAll(elSeq)
+          .select('.node-label')
+            .style('color', 'red');
+        
+      }
+    } // dispatcher.stepInto()
   }; // Dispatcher
   
   this.PathStep = class {
-    constructor (xpath) {
+    constructor (xpath, start) {
       var regexStep, match, ns,
           useXPath = normalizeSpace(xpath);
       regexStep =
@@ -112,28 +134,57 @@ var xplr = xplr || {};
           this.axis = 'descendant';
         }
         this.gi = match.groups.gi;
+        this.axisPopulace = [];
       }
+      this.iteration = 0;
     }
     
-    get next() {
+    get nextPath() {
       var expr = null;
       if ( this.remainder !== '' ) {
         expr = new that.PathStep(this.remainder);
       }
       return expr;
-    } // pathStep.next
+    } // pathStep.nextPath
     
-    step(node) {
-      var candidates = node.getAxis(this.axis);
-      candidates = candidates.filter(this.test, this);
-      console.log(candidates);
+    isComplete() {
+      var bool;
+      switch (this.axis) {
+        case 'ancestor':
+        case 'ancestor-or-self':
+        case 'descendant':
+        case 'descendant-or-self':
+          bool = this.iteration >= 1 && this.axisPopulace.length === 0;
+          break;
+        default:
+          bool = this.iteration === 1;
+      }
+      return bool;
+    } // pathStep.isComplete()
+    
+    step(nodeSeq) {
+      var prevNodes,
+          candidates = null;
+      if ( !this.isComplete() ) {
+        prevNodes = this.iteration === 0 ? nodeSeq : this.axisPopulace;
+        this.axisPopulace = [];
+        //console.log(prevNodes);
+        prevNodes.forEach( function(node) {
+          var nodeAxis = node.getAxis(this.axis);
+          if ( nodeAxis !== null ) {
+            this.axisPopulace = this.axisPopulace.concat(nodeAxis);
+          }
+        }, this);
+        candidates = this.axisPopulace.filter(this.test, this);
+        this.iteration++;
+      }
       return candidates;
     } // pathStep.step()
     
     test(node) {
       var giMatch = this.gi === node.gi;
       return giMatch;
-    }
+    } // pathStep.test()
   }; // PathStep
   
   this.XmlNode = class {
@@ -158,11 +209,11 @@ var xplr = xplr || {};
           moveTo = this;
           break;
         case 'child':
-        //case 'descendant':
+        case 'descendant':
           moveTo = this.children;
           break;
         default:
-          console.log(step);
+          console.warn('Axis '+step+' not implemented');
       }
       return moveTo;
     } // xmlNode.getAxis()
@@ -222,7 +273,7 @@ var onLoad = function() {
   xCode.setRangeText(testXPath);
   btnNext.datum(dispatch)
       .on('click', function() {
-        dispatch.manageQueue(d3.event);
+        dispatch.stepInto(d3.event);
       });
 };
 
