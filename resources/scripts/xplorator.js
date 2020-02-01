@@ -193,7 +193,6 @@ var xplr = xplr || {};
           candidates = null;
       if ( !this.isComplete() ) {
         prevNodes = this.iteration === 0 ? nodeSeq : this.axisPopulace;
-        this.axisPopulace = [];
         //console.log(prevNodes);
         prevNodes.forEach( function(node) {
           var nodeAxis = node.getAxis(this.axis);

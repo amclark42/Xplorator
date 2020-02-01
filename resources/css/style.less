@@ -16,6 +16,7 @@
   @faded_page_dark: #f0ebe3;
   @faded_page_darker: #e7dfd3;
   @offwhite: rgb(255,255,254);
+  @clear: rgba(0,0,0,0);
   
   @rust_lightest: #FFCAAA;
   @rust_lighter: #D4926A;
@@ -55,10 +56,12 @@
 body {
   background-color: white;
   font-family: @sansserif;
+  color: @stormy-sky-darkest;
 }
 
 ol {
-  padding-left: 1.5rem;
+  border-left: 0.5rem ridge @clear;
+  padding-left: 1rem;
   
   li {
     margin: 0.5rem 0;
@@ -81,6 +84,7 @@ button {
 
 #controller {
   padding: 1rem 0 0.5rem;
+  z-index: 2;
   top: 0;
   position: -webkit-sticky;
   position: sticky;
@@ -136,7 +140,7 @@ button {
     li {
       
       &:before, &:after {
-        color: @rust_darkest;
+        color: @rust_darker;
       }
       
       &[data-gi] {
@@ -158,15 +162,20 @@ button {
       &[data-node-type='text()'] {
         
         &:before, &:after {
-          font-size: 1.25em;
+          display: inline-block;
+          transform: translate(0, 0.1rem);
+          font-size: 1.35em;
+          font-weight: bold;
         }
         
         &:before {
           content: "“";
+          padding-right: 0.1rem;
         }
         
         &:after {
           content: "”";
+          padding-left: 0.1rem;
         }
       } // #viewer #document-node li[data-node-type='text()']
       
@@ -174,7 +183,7 @@ button {
         color: red;
         
         &:before, &:after {
-          color: darkred;
+          color: red;
         }
         
         &[data-gi] {
@@ -182,11 +191,14 @@ button {
           
           & > .container > .node-label,
           &:after {
-            //background-color: @stormy-sky-darker;
-            color: red;
+            color: darkred;
           }
         } // &[data-gi]
-      } // // #viewer #document-node li.expr-nonmatch
+        
+        > ol.node-container {
+          border-color: red;
+        } // & > ol.node-container
+      } // #viewer #document-node li.expr-nonmatch
       
       &.expr-match {
         
@@ -204,6 +216,10 @@ button {
             color: inherit;
           }
         } // &[data-gi]
+        
+        > ol.node-container {
+          border-color: @forest-green-lighter;
+        } // & > ol.node-container
       } // &.expr-match
     } // & li
   } // & #document-node
