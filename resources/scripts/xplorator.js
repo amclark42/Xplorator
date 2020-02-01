@@ -93,6 +93,20 @@ var xplr = xplr || {};
       console.log(this.queue[0]);
     } // dispatcher.manageQueue()
     
+    clearVisuals() {
+      var onLastStep = this.queue[0].remainder === '',
+          hasIterated = this.queue[0].iteration > 1,
+          prevMatches = d3.selectAll('.expr-match');
+      // Restore previous non-matches to the default styling.
+      d3.selectAll('.expr-nonmatch')
+          .classed('expr-nonmatch', false);
+      /* Clear previous matches, unless we're collecting matches on the final 
+        expression. */
+      if ( !onLastStep || (onLastStep && !hasIterated) ) {
+        prevMatches.classed('expr-match', false);
+      }
+    } // dispatcher.clearVisuals()
+    
     stepInto(e) {
       this.manageQueue(e);
       if ( this.queue.length >= 1 ) {
@@ -105,10 +119,10 @@ var xplr = xplr || {};
           }, this);
         }
         console.log(elSeq);
+        this.clearVisuals();
         elSeq = d3.selectAll(elSeq)
           .select('.node-label')
             .classed('expr-match', true);
-        
       }
     } // dispatcher.stepInto()
   }; // Dispatcher
