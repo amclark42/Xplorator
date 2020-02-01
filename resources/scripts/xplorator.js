@@ -57,6 +57,15 @@ var xplr = xplr || {};
   
   /*** Public functions ***/
   
+  this.getHtmlElements = function(nodes) {
+    var elSeq = [];
+    if ( nodes !== undefined && nodes.constructor === Array ) {
+      nodes.forEach( function(node) {
+        elSeq.push(node.el);
+      });
+    }
+    return elSeq;
+  }; // this.getHtmlElements()
   
   
   /*** Class definitions ***/
@@ -111,16 +120,20 @@ var xplr = xplr || {};
       this.manageQueue(e);
       if ( this.queue.length >= 1 ) {
         var nodeStep = this.queue[0],
-            elSeq = [];
+            elSeqFull = [],
+            elSeqMatched = [];
         this.currentPlace = nodeStep.step(this.currentPlace);
-        if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
-          this.currentPlace.forEach( function(node) {
-            elSeq.push(node.el);
-          }, this);
-        }
-        console.log(elSeq);
         this.clearVisuals();
-        elSeq = d3.selectAll(elSeq)
+        elSeqFull = that.getHtmlElements(nodeStep.axisPopulace);
+        console.log(elSeqFull);
+        d3.selectAll(elSeqFull)
+            .classed('expr-nonmatch', true);
+        if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
+          elSeqMatched = that.getHtmlElements(this.currentPlace);
+        }
+        //console.log(elSeq);
+        d3.selectAll(elSeqMatched)
+            .classed('expr-nonmatch', false)
             .classed('expr-match', true);
       }
     } // dispatcher.stepInto()

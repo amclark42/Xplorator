@@ -1,9 +1,4 @@
 /* Xplorator styles */
-/*.color-secondary-2-1 { color: #A8DB92 }
-  .color-secondary-2-2 { color: #77B65B }
-  .color-secondary-2-0 { color: #4E9231 }
-  .color-secondary-2-3 { color: #2E6E13 }
-  .color-secondary-2-4 { color: #164900 }*/
 .code {
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
@@ -74,9 +69,14 @@ button:active {
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
   background-color: #ffcaaa;
+  color: #552000;
 }
 #viewer #document-node ol {
   list-style-type: none;
+}
+#viewer #document-node li:before,
+#viewer #document-node li:after {
+  color: #552000;
 }
 #viewer #document-node li[data-gi]:after {
   margin-left: 0.2rem;
@@ -85,17 +85,17 @@ button:active {
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
   background-color: #ffcaaa;
+  color: #552000;
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
 }
 #viewer #document-node li[data-node-type='comment()'] {
-  color: #2E6E13;
+  color: #2e6e13;
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
 }
 #viewer #document-node li[data-node-type='text()']:before,
 #viewer #document-node li[data-node-type='text()']:after {
-  color: #aa6339;
   font-size: 1.25em;
 }
 #viewer #document-node li[data-node-type='text()']:before {
@@ -104,8 +104,29 @@ button:active {
 #viewer #document-node li[data-node-type='text()']:after {
   content: "”";
 }
-#viewer #document-node li.expr-match > .container > .node-label,
+#viewer #document-node li.expr-nonmatch {
+  color: red;
+}
+#viewer #document-node li.expr-nonmatch:before,
+#viewer #document-node li.expr-nonmatch:after {
+  color: darkred;
+}
+#viewer #document-node li.expr-nonmatch[data-gi] {
+  color: inherit;
+}
+#viewer #document-node li.expr-nonmatch[data-gi] > .container > .node-label,
+#viewer #document-node li.expr-nonmatch[data-gi]:after {
+  color: red;
+}
+#viewer #document-node li.expr-match:before,
 #viewer #document-node li.expr-match:after {
-  background-color: #143054;
-  color: #ffcaaa;
+  color: #4e9231;
+}
+#viewer #document-node li.expr-match[data-gi] {
+  color: inherit;
+}
+#viewer #document-node li.expr-match[data-gi] > .container > .node-label,
+#viewer #document-node li.expr-match[data-gi]:after {
+  background-color: #a8db92;
+  color: inherit;
 }

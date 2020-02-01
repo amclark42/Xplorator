@@ -31,11 +31,11 @@
   @stormy-sky-darkest: #051B38;
 
   // Main secondary color (green)
-  /*.color-secondary-2-1 { color: #A8DB92 }
-  .color-secondary-2-2 { color: #77B65B }
-  .color-secondary-2-0 { color: #4E9231 }
-  .color-secondary-2-3 { color: #2E6E13 }
-  .color-secondary-2-4 { color: #164900 }*/
+  @forest-green-lightest: #A8DB92;
+  @forest-green-lighter: #77B65B;
+  @forest-green: #4E9231;
+  @forest-green-darker: #2E6E13;
+  @forest-green-darkest: #164900;
 
   //*  Fonts
 
@@ -126,7 +126,7 @@ button {
       border-radius: 0.5rem;
       padding: 0.1rem 0.15rem;
       background-color: @rust_lightest;
-      
+      color: @rust_darkest;
     } // #viewer #document-node .node-label
     
     ol {
@@ -134,6 +134,10 @@ button {
     }
     
     li {
+      
+      &:before, &:after {
+        color: @rust_darkest;
+      }
       
       &[data-gi] {
         
@@ -147,14 +151,13 @@ button {
       } // #viewer #document-node li[data-gi]
       
       &[data-node-type='comment()'] {
-        color: #2E6E13;
+        color: @forest-green-darker;
         .code();
       } // #viewer #document-node li[data-node-type='comment()']
       
       &[data-node-type='text()'] {
         
         &:before, &:after {
-          color: @rust;
           font-size: 1.25em;
         }
         
@@ -167,13 +170,40 @@ button {
         }
       } // #viewer #document-node li[data-node-type='text()']
       
+      &.expr-nonmatch {
+        color: red;
+        
+        &:before, &:after {
+          color: darkred;
+        }
+        
+        &[data-gi] {
+          color: inherit;
+          
+          & > .container > .node-label,
+          &:after {
+            //background-color: @stormy-sky-darker;
+            color: red;
+          }
+        } // &[data-gi]
+      } // // #viewer #document-node li.expr-nonmatch
+      
       &.expr-match {
         
-        & > .container > .node-label,
+        &:before,
         &:after {
-          background-color: @stormy-sky-darker;
-          color: @rust_lightest;
+          color: @forest-green;
         }
+        
+        &[data-gi] {
+          color: inherit;
+          
+          & > .container > .node-label,
+          &:after {
+            background-color: @forest-green-lightest;
+            color: inherit;
+          }
+        } // &[data-gi]
       } // &.expr-match
     } // & li
   } // & #document-node
