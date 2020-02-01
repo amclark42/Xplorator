@@ -13,11 +13,10 @@ body {
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 ol {
-  margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
 ol li {
-  margin-top: 0.15rem;
+  margin: 0.5rem 0;
 }
 button {
   border: medium outset #4c678b;
@@ -72,31 +71,22 @@ button:active {
   list-style-type: none;
 }
 #viewer #document-node .node-label {
-  margin: auto;
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
   background-color: #ffcaaa;
-}
-#viewer #document-node .node-label.expr-match {
-  background-color: #143054;
-  color: #ffcaaa;
 }
 #viewer #document-node ol {
   list-style-type: none;
 }
 #viewer #document-node li[data-gi]:after {
+  margin-left: 0.2rem;
   content: "</" attr(data-gi) ">";
   display: inline-block;
-  margin: auto;
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
   background-color: #ffcaaa;
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
-}
-#viewer #document-node li[data-gi]:after.expr-match {
-  background-color: #143054;
-  color: #ffcaaa;
 }
 #viewer #document-node li[data-node-type='comment()'] {
   color: #2E6E13;
@@ -113,4 +103,9 @@ button:active {
 }
 #viewer #document-node li[data-node-type='text()']:after {
   content: "”";
+}
+#viewer #document-node li.expr-match > .container > .node-label,
+#viewer #document-node li.expr-match:after {
+  background-color: #143054;
+  color: #ffcaaa;
 }

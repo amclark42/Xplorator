@@ -121,7 +121,6 @@ var xplr = xplr || {};
         console.log(elSeq);
         this.clearVisuals();
         elSeq = d3.selectAll(elSeq)
-          .select('.node-label')
             .classed('expr-match', true);
       }
     } // dispatcher.stepInto()

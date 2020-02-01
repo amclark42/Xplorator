@@ -58,11 +58,10 @@ body {
 }
 
 ol {
-  margin: 0.5rem 0;
   padding-left: 1.5rem;
   
   li {
-    margin-top: 0.15rem;
+    margin: 0.5rem 0;
   }
 } // ol
 
@@ -124,50 +123,58 @@ button {
     list-style-type: none;
     
     .node-label {
-      margin: auto;
       border-radius: 0.5rem;
       padding: 0.1rem 0.15rem;
       background-color: @rust_lightest;
       
-      &.expr-match {
-        background-color: @stormy-sky-darker;
-        color: @rust_lightest;
-      }
     } // #viewer #document-node .node-label
     
     ol {
       list-style-type: none;
     }
     
-    li[data-gi] {
+    li {
       
-      &:after {
-        content: "</" attr(data-gi) ">";
-        display: inline-block;
-        .node-label();
+      &[data-gi] {
+        
+        &:after {
+          margin-left: 0.2rem;
+          content: "</" attr(data-gi) ">";
+          display: inline-block;
+          .node-label();
+          .code();
+        }
+      } // #viewer #document-node li[data-gi]
+      
+      &[data-node-type='comment()'] {
+        color: #2E6E13;
         .code();
-      }
-    }
-    
-    li[data-node-type='comment()'] {
-      color: #2E6E13;
-      .code();
-    }
-    
-    li[data-node-type='text()'] {
+      } // #viewer #document-node li[data-node-type='comment()']
       
-      &:before, &:after {
-        color: @rust;
-        font-size: 1.25em;
-      }
+      &[data-node-type='text()'] {
+        
+        &:before, &:after {
+          color: @rust;
+          font-size: 1.25em;
+        }
+        
+        &:before {
+          content: "“";
+        }
+        
+        &:after {
+          content: "”";
+        }
+      } // #viewer #document-node li[data-node-type='text()']
       
-      &:before {
-        content: "“";
-      }
-      
-      &:after {
-        content: "”";
-      }
-    } // #viewer #document-node li[data-node-type='type']
+      &.expr-match {
+        
+        & > .container > .node-label,
+        &:after {
+          background-color: @stormy-sky-darker;
+          color: @rust_lightest;
+        }
+      } // &.expr-match
+    } // & li
   } // & #document-node
 } // #viewer
