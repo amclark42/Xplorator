@@ -67,6 +67,12 @@ var xplr = xplr || {};
     return elSeq;
   }; // this.getHtmlElements()
   
+  this.nodesEqual = function(node1, node2) {
+    var el1 = node1.el,
+        el2 = node2.el;
+    return el1 === el2;
+  }; // this.nodesEqual()
+  
   
   /*** Class definitions ***/
   
@@ -103,15 +109,15 @@ var xplr = xplr || {};
     } // dispatcher.manageQueue()
     
     clearVisuals() {
-      var onLastStep = this.queue[0].remainder === '',
-          hasIterated = this.queue[0].iteration > 1,
+      var onLastStep = this.queue[0].isFinal(),
+          hasIterated = this.queue[0].iteration > 0,
           prevMatches = d3.selectAll('.expr-match');
       // Restore previous non-matches to the default styling.
       d3.selectAll('.expr-nonmatch')
           .classed('expr-nonmatch', false);
       /* Clear previous matches, unless we're collecting matches on the final 
         expression. */
-      if ( !onLastStep || (onLastStep && !hasIterated) ) {
+      if ( !onLastStep || (onLastStep && !hasIterated ) ) {
         prevMatches.classed('expr-match', false);
       }
     } // dispatcher.clearVisuals()
@@ -120,14 +126,17 @@ var xplr = xplr || {};
       this.manageQueue(e);
       if ( this.queue.length >= 1 ) {
         var nodeStep = this.queue[0],
+            wasComplete = nodeStep.isComplete(),
             elSeqFull = [],
             elSeqMatched = [];
-        this.currentPlace = nodeStep.step(this.currentPlace);
         this.clearVisuals();
+        this.currentPlace = nodeStep.step(this.currentPlace);
         elSeqFull = that.getHtmlElements(nodeStep.axisPopulace);
-        console.log(elSeqFull);
-        d3.selectAll(elSeqFull)
-            .classed('expr-nonmatch', true);
+        //console.log(elSeqFull);
+        if ( !nodeStep.isFinal() || !wasComplete ) {
+          d3.selectAll(elSeqFull)
+              .classed('expr-nonmatch', true);
+        }
         if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
           elSeqMatched = that.getHtmlElements(this.currentPlace);
         }
@@ -160,14 +169,14 @@ var xplr = xplr || {};
           this.axis = 'descendant';
         }
         this.gi = match.groups.gi;
-        this.axisPopulace = [];
       }
+      this.axisPopulace = [];
       this.iteration = 0;
     }
     
     get nextPath() {
       var expr = null;
-      if ( this.remainder !== '' ) {
+      if ( !this.isFinal() ) {
         expr = new that.PathStep(this.remainder);
       }
       return expr;
@@ -188,19 +197,33 @@ var xplr = xplr || {};
       return bool;
     } // pathStep.isComplete()
     
+    isFinal() {
+      return this.remainder === '';
+    } // pathStep.isFinal()
+    
     step(nodeSeq) {
       var prevNodes,
           candidates = null;
       if ( !this.isComplete() ) {
         prevNodes = this.iteration === 0 ? nodeSeq : this.axisPopulace;
-        //console.log(prevNodes);
         prevNodes.forEach( function(node) {
           var nodeAxis = node.getAxis(this.axis);
           if ( nodeAxis !== null ) {
+            /* Filter out nodes that already have been added to the axisPopulace. */
+            nodeAxis = nodeAxis.filter( function(nodeA) {
+              return !this.axisPopulace.some(nodeB => that.nodesEqual(nodeA, nodeB));
+            }, this);
             this.axisPopulace = this.axisPopulace.concat(nodeAxis);
           }
         }, this);
-        candidates = this.axisPopulace.filter(this.test, this);
+        /* If no new nodes have been added to the axisPopulace, the expression is 
+          complete. Otherwise, return the new nodes which are a positive match for 
+          the expression. */
+        if ( prevNodes.length === this.axisPopulace.length ) {
+          this.axisPopulace = [];
+        } else {
+          candidates = this.axisPopulace.filter(this.test, this);
+        }
         this.iteration++;
       }
       return candidates;
