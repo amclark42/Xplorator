@@ -26,18 +26,18 @@ xquery version "3.1";
   
   declare
     %rest:GET
-    %rest:path('xplorator')
+    %rest:path('/xplorator')
     %output:method('xhtml')
   function exp:get-form() {
     let $form :=
-      <form method="post" enctype="multipart/form-data">
+      <form action="xplorator/browser" method="post" enctype="multipart/form-data">
         <div>
           <label for="title">Title:</label>
           <input type="text" id="title" name="title" spellcheck="false"></input>
         </div>
         <div>
-          <label for="xml-file">XML file:</label>
-          <input type="file" id="xml-file" name="xml-file"></input>
+          <label for="xmlfile">XML file:</label>
+          <input type="file" id="xmlfile" name="xmlfile"></input>
         </div>
         <button type="submit">Transform</button>
       </form>
@@ -50,6 +50,23 @@ xquery version "3.1";
     return exp:fill-template((), $body)
   };
   
+  declare
+    %rest:POST('{$request}')
+    %rest:path('/xplorator/browser')
+    %rest:consumes('multipart/form-data')
+    %output:method('xhtml')
+  function exp:submit-xml($request) {
+    (:let $output :=
+      try {
+        let $doc := parse-xml($xmlfile)
+        return exists($doc)
+      } catch * {
+        'error'
+      }
+    return:)
+      exp:fill-template((), $request)
+  };
+
 
 (:  SUPPORT FUNCTIONS  :)
   
