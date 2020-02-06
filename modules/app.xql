@@ -1,74 +1,82 @@
-xquery version "3.0";
+xquery version "3.1";
 
-module namespace app="http://wwp.northeastern.edu/templates";
-declare namespace mtx="http://xplorator.org/metallix";
+  module namespace exp="http://amclark42.net/ns/xplorator/functions";
+(:  LIBRARIES  :)
+(:  NAMESPACES  :)
+  declare default element namespace "http://www.w3.org/1999/xhtml";
+  declare namespace array="http://www.w3.org/2005/xpath-functions/array";
+  declare namespace http="http://expath.org/ns/http-client";
+  declare namespace map="http://www.w3.org/2005/xpath-functions/map";
+  declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
+  (: eXist has "request" bound to an eXist-specific URI. :)
+  (:declare namespace request="http://exquery.org/ns/request";:)
+  declare namespace rest="http://exquery.org/ns/restxq";
 
-import module namespace templates="http://exist-db.org/xquery/templates";
-import module namespace config="http://wwp.northeastern.edu/config" at "config.xqm";
-import module namespace transform="http://exist-db.org/xquery/transform";
+(:~
+  Functions, RESTXQ and otherwise, for the Xplorator.
+  
+  @author Ashley M. Clark
+  2020
+ :)
+ 
+(:  VARIABLES  :)
+  
 
-(: Test string for XPath-ability. :)
-(:declare %private function app:sanitize($xpath as xs:string) {
-    
-};:)
+(:  FUNCTIONS  :)
+  
+  declare
+    %rest:GET
+    %rest:path('/xplorator')
+    %output:method('xhtml')
+  function exp:get-form() {
+    let $form :=
+      <form action="xplorator/browser" method="post" enctype="multipart/form-data">
+        <div>
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" spellcheck="false"></input>
+        </div>
+        <div>
+          <label for="xmlfile">XML file:</label>
+          <input type="file" id="xmlfile" name="xmlfile"></input>
+        </div>
+        <button type="submit">Transform</button>
+      </form>
+    let $body := (
+        attribute lang { 'en' },
+        <div>
+          { $form }
+        </div>
+      )
+    return exp:fill-template((), $body)
+  };
+  
+  declare
+    %rest:POST('{$request}')
+    %rest:path('/xplorator/browser')
+    %rest:consumes('multipart/form-data')
+    %output:method('xhtml')
+  function exp:submit-xml($request) {
+    (:let $output :=
+      try {
+        let $doc := parse-xml($xmlfile)
+        return exists($doc)
+      } catch * {
+        'error'
+      }
+    return:)
+      exp:fill-template((), $request)
+  };
 
-(:  :)
-declare %private function app:reduce-text($item) as xs:string {
-  let $allTxt := if ($item instance of element()) then string-join($item//text(),' ') else string($item)
-  let $strLen := string-length($allTxt)
-  return 
-    if ($strLen > 40) then
-      concat(substring($allTxt,1,20), ' ... ', substring($allTxt,$strLen - 20,$strLen))
-    else $allTxt
-};
 
-(: Create a list of results. :)
-declare %private function app:listify($xpath as xs:string) as node()* {
-    let $pathedXPath := if (starts-with($xpath,'/')) then $xpath else concat('/',$xpath)
-    return
-      <div>
-        <p>{$xpath}</p>
-        <table>
-          <tr>
-            <th>Document</th>
-            <!--<th>Text</th>-->
-            <th>Result</th>
-            <th>Select</th>
-          </tr>
-          {
-            for $doc in ('partsOfAnXPath.xml','whyXPath.xml')
-            let $onDoc := concat("doc('../resources/xml/",$doc,"')",$pathedXPath)
-              for $result in ( util:eval($onDoc) )
-              return
-                <tr>
-                  <td>{$doc}</td>
-                  <!--<td>{app:reduce-text($result)}</td>-->
-                  <td>
-                      {
-                        typeswitch($result)
-                          case element() return replace(util:node-xpath($result),'\[[ @:-_.]+\]','')
-                          case attribute() return string($result)
-                          case text() return string($result)
-                          case xs:decimal return string($result)
-                          case comment() return string($result)
-                          case processing-instruction() return string($result)
-                          default return ""
-                      }
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary result-btn" data-toggle="button" aria-pressed="false"
-                      data-target="{if ($result instance of element()) then concat($doc,'-',$result/string(@xml:id)) else ()}">&gt;</button>
-                  </td>
-                </tr>
-          }
-        </table>
-      </div>
-};
-
-(: Run a user-defined XPath. :)
-declare function app:runXPath($node as node(), $model as map(*), $xpath as xs:string?) {
-    if ($xpath) then
-      (: if local:tokenize($xpath) then... :)
-      app:listify($xpath)
-    else ()
-};
+(:  SUPPORT FUNCTIONS  :)
+  
+  declare %private function exp:fill-template($title as xs:string?, $body as item()*) {
+    <html>
+      <head lang="en">
+        <title>{ if ( $title ) then concat($title,' | ') else () }Xplorator</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      </head>
+      <body>{ $body }</body>
+    </html>
+  };
