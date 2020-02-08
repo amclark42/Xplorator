@@ -30,14 +30,11 @@ xquery version "3.1";
     %output:method('xhtml')
   function exp:get-form() {
     let $form :=
-      <form action="xplorator/browser" method="post" enctype="multipart/form-data">
-        <div>
-          <label for="title">Title:</label>
-          <input type="text" id="title" name="title" spellcheck="false"></input>
-        </div>
+      <form action="xplorator/browser" method="post" autocomplete="off" 
+         enctype="multipart/form-data">
         <div>
           <label for="xmlfile">XML file:</label>
-          <input type="file" id="xmlfile" name="xmlfile"></input>
+          <input type="file" id="xmlfile" name="xmlfile" required="true"></input>
         </div>
         <button type="submit">Transform</button>
       </form>
@@ -51,20 +48,26 @@ xquery version "3.1";
   };
   
   declare
-    %rest:POST('{$request}')
+    %rest:POST
     %rest:path('/xplorator/browser')
     %rest:consumes('multipart/form-data')
+    %rest:form-param('xmlfile', '{$xml-file}', '<fallback/>')
     %output:method('xhtml')
-  function exp:submit-xml($request) {
-    (:let $output :=
-      try {
-        let $doc := parse-xml($xmlfile)
-        return exists($doc)
-      } catch * {
-        'error'
-      }
-    return:)
-      exp:fill-template((), $request)
+  function exp:submit-xml($xml-file) {
+    let $input :=
+      typeswitch ($xml-file)
+        case node() return $xml-file
+        case map(*) return
+          for $filename in map:keys($xml-file)
+          let $binary := $xml-file?($filename)
+          let $str := bin:decode-string($binary)
+          return try { parse-xml($str) } catch * { 'error' }
+        default return
+          try { parse-xml($xml-file)
+          } catch * { 'error' }
+    (:let $result := fn:transform($input):)
+    return
+      exp:fill-template((), $input)
   };
 
 
