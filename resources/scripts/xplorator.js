@@ -13,6 +13,18 @@ var xplr = xplr || {};
   
   /*** Private functions ***/
   
+  /* Create a RegExp object for an XPath expression. This function is intended ease debugging and
+    improvement of the regular expression. */
+  var buildXPathRegex = function() {
+    var axis = "(\/)?",
+        nsPrefix = "(?:(\\w+|\\*):)?",
+        localName = "([_a-zA-Z][\\w\._-]*)",
+        name = "("+nsPrefix+localName+")",
+        regex = "^\/"+axis+name;
+    return new RegExp(regex);
+  };
+  var xpathRegex = buildXPathRegex();
+  
   /*  */
   var classifyNode = function(el, ns) {
     var classedNode = null;
@@ -162,11 +174,8 @@ var xplr = xplr || {};
     constructor (xpath, start) {
       var regexStep, match, ns,
           useXPath = normalizeSpace(xpath);
-      regexStep =
-        /^\/(?<axis>\/)?\s?(?<gi>(?:(?<prefix>\w+|\*):)?[_\p{Letter}][\w_\.-]*)/u;
-      match = regexStep.exec(useXPath);
+      match = xpathRegex.exec(useXPath);
       //console.log(match);
-      this.remainder = useXPath.slice(match[0].length);
       // Recover from a string that doesn't match expectations about XPath.
       if ( match === null ) {
         this.msg = {
@@ -174,11 +183,12 @@ var xplr = xplr || {};
             'say': "Cannot parse string '"+xpath+"' as XPath."
           };
       } else {
-        this.axis = match.groups.axis || 'child';
+        this.remainder = useXPath.slice(match[0].length);
+        this.axis = match[1] || 'child';
         if ( this.axis === '/' ) {
           this.axis = 'descendant';
         }
-        this.gi = match.groups.gi;
+        this.gi = match[2];
       }
       this.axisPopulace = [];
       this.iteration = 0;
