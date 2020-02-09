@@ -4,6 +4,7 @@
   font-size: 1.15rem;
 }
 body {
+  margin: 0;
   background-color: white;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   color: #051b38;
@@ -17,9 +18,9 @@ ol li {
   margin: 0.5rem 0;
 }
 button {
-  border: medium outset #4c678b;
+  border: medium outset #748ba7;
   border-radius: 0.25rem;
-  background-color: #2c4970;
+  background-color: #4c678b;
   color: white;
   font-family: inherit;
   font-size: 0.9rem;
@@ -29,12 +30,13 @@ button:active {
   border-style: inset;
 }
 #controller {
-  padding: 1rem 0 0.5rem;
+  padding: 1rem 1rem 0.5rem;
   z-index: 2;
   top: 0;
   position: -webkit-sticky;
   position: sticky;
-  background-color: white;
+  background-color: #2c4970;
+  color: #f9f7f4;
 }
 #controller form,
 #controller div[role='form'] {
@@ -64,7 +66,11 @@ button:active {
 #controller div[role='form'] button {
   margin: 0 0.5rem;
 }
+#viewer {
+  margin: 0 1.5rem;
+}
 #viewer #document-node {
+  margin: auto;
   padding: 1rem;
   background-color: #f9f7f4;
   list-style-type: none;

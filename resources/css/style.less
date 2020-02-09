@@ -54,6 +54,7 @@
 //*  STYLES
 
 body {
+  margin: 0;
   background-color: white;
   font-family: @sansserif;
   color: @stormy-sky-darkest;
@@ -70,9 +71,9 @@ ol {
 } // ol
 
 button {
-  border: medium outset @stormy-sky-lighter;
+  border: medium outset @stormy-sky-lightest;
   border-radius: 0.25rem;
-  background-color: @stormy-sky;
+  background-color: @stormy-sky-lighter;
   color: white;
   font-family: inherit;
   font-size: 0.9rem;
@@ -84,12 +85,13 @@ button {
 } // button
 
 #controller {
-  padding: 1rem 0 0.5rem;
+  padding: 1rem 1rem 0.5rem;
   z-index: 2;
   top: 0;
   position: -webkit-sticky;
   position: sticky;
-  background-color: white;
+  background-color: @stormy-sky;
+  color: @faded_page;
   
   form, div[role='form'] {
     padding: 0.5rem;
@@ -121,8 +123,10 @@ button {
 } // #controller
 
 #viewer {
+  margin: 0 1.5rem;
   
   #document-node {
+    margin: auto;
     padding: 1rem;
     background-color: @faded_page;
     list-style-type: none;
