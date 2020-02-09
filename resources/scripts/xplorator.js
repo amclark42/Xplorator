@@ -16,13 +16,18 @@ var xplr = xplr || {};
   /* Create a RegExp object for an XPath expression. This function is intended ease debugging and
     improvement of the regular expression. */
   var buildXPathRegex = function() {
-    var axis = "(\/)?",
+    var axesAbbrev = "\\/"
+        axesNamed = 
+          "(?:self|child|descendant)::"
+        axis =
+          "^(\\/(?:"+axesAbbrev+"|"+axesNamed+")?)?",
         nsPrefix = "(?:(\\w+|\\*):)?",
-        localName = "([_a-zA-Z][\\w\._-]*)",
+        localName = "([_a-zA-Z][\\w\\._-]*)",
         name = "("+nsPrefix+localName+")",
-        regex = "^\/"+axis+name;
+        regex = axis+name;
     return new RegExp(regex);
   };
+  /* The result of the above function. */
   var xpathRegex = buildXPathRegex();
   
   /*  */
@@ -184,9 +189,20 @@ var xplr = xplr || {};
           };
       } else {
         this.remainder = useXPath.slice(match[0].length);
-        this.axis = match[1] || 'child';
-        if ( this.axis === '/' ) {
-          this.axis = 'descendant';
+        switch (match[1]) {
+          case undefined:
+          case '/':
+            this.axis = 'child';
+            break;
+          case '.':
+            this.axis = 'self';
+            break;
+          case '//':
+            this.axis = 'descendant';
+            break;
+          default:
+            this.axis = 
+              match[1].replace(/\/(self|child|descendant)::$/, '$1');
         }
         this.gi = match[2];
       }
@@ -222,11 +238,12 @@ var xplr = xplr || {};
     } // pathStep.isFinal()
     
     step(nodeSeq) {
-      var prevNodes,
+      var currentContext,
+          prevNodes = this.axisPopulace,
           candidates = null;
       if ( !this.isComplete() ) {
-        prevNodes = this.iteration === 0 ? nodeSeq : this.axisPopulace;
-        prevNodes.forEach( function(node) {
+        currentContext = this.iteration === 0 ? nodeSeq : this.axisPopulace;
+        currentContext.forEach( function(node) {
           var nodeAxis = node.getAxis(this.axis);
           if ( nodeAxis !== null ) {
             /* Filter out nodes that already have been added to the axisPopulace. */
@@ -235,6 +252,7 @@ var xplr = xplr || {};
             }, this);
             this.axisPopulace = this.axisPopulace.concat(nodeAxis);
           }
+          console.log(prevNodes);
         }, this);
         /* If no new nodes have been added to the axisPopulace, the expression is 
           complete. Otherwise, return the new nodes which are a positive match for 
@@ -271,10 +289,10 @@ var xplr = xplr || {};
     } // xmlNode.nodeType
     
     getAxis(step) {
-      var moveTo;
+      var moveTo = [];
       switch (step) {
         case 'self':
-          moveTo = this;
+          moveTo.push(this);
           break;
         case 'child':
         case 'descendant':
