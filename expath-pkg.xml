@@ -2,4 +2,6 @@
 <package xmlns="http://expath.org/ns/pkg" name="http://amclark42.net/xplorator" 
    abbrev="xplorator" version="0.2.0" spec="1.0">
   <title>Xplorator</title>
+  
+  <dependency package="http://expath.org/ns/binary"/>
 </package>

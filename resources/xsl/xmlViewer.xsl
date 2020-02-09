@@ -15,10 +15,31 @@
   <xsl:output encoding="UTF-8" indent="no" method="xhtml"/>
   
   <!--  PARAMETERS  -->
+  <xsl:param name="assets-scripts" as="node()*">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="resources/scripts/xplorator.js"></script>
+  </xsl:param>
+  <xsl:param name="assets-styles" as="node()*">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap"></link>
+    <link rel="stylesheet" href="resources/css/style.css"></link>
+  </xsl:param>
+  <xsl:param name="controller" as="node()?">
+    <div id="controller">
+      <div role="form">
+        <div>
+          <label for="xpath-code">XPath: </label>
+          <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
+        </div>
+        <button name="step">Next step</button>
+      </div>
+    </div>
+  </xsl:param>
   <xsl:param name="debug" select="false()" as="xs:boolean"/>
+  <xsl:param name="include-controller" select="true()" as="xs:boolean"/>
   <xsl:param name="standalone" select="false()" as="xs:boolean"/>
   
   <!--  GLOBAL VERIABLES  -->
+  
   
   
   <!--  IDENTITY TEMPLATES  -->
@@ -72,7 +93,7 @@
   <!--  TEMPLATES, #default mode  -->
   
   <xsl:template match="/">
-    <xsl:variable name="content">
+    <xsl:variable name="content" as="node()">
       <div id="viewer">
         <ol id="document-node" class="node-container">
           <xsl:attribute name="data-node-type" select="'document-node()'"/>
@@ -86,24 +107,24 @@
       <xsl:when test="$standalone">
         <html lang="en">
           <head>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap"></link>
-            <link rel="stylesheet" href="resources/css/style.css"></link>
-            <script src="https://d3js.org/d3.v5.min.js"></script>
-            <script src="resources/scripts/xplorator.js"></script>
+            <xsl:copy-of select="$assets-styles"/>
+            <xsl:copy-of select="$assets-scripts"/>
           </head>
           <body>
-            <div id="controller">
-              <div role="form">
-                <div>
-                  <label for="xpath-code">XPath: </label>
-                  <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
-                </div>
-                <button name="step">Next step</button>
-              </div>
-            </div>
+            <xsl:if test="$include-controller">
+              <xsl:copy-of select="$controller"/>
+            </xsl:if>
             <xsl:copy-of select="$content"/>
           </body>
         </html>
+      </xsl:when>
+      <!-- If we're not in standalone mode and the controller is requested, wrap both controller and pseudo-XML 
+        in a <div>. -->
+      <xsl:when test="$include-controller">
+        <div>
+          <xsl:copy-of select="$controller"/>
+          <xsl:copy-of select="$content"/>
+        </div>
       </xsl:when>
       <!-- By default, simply output the <div> container. -->
       <xsl:otherwise>

@@ -35,13 +35,23 @@ var xplr = xplr || {};
   
   /* Detemine if a given HTML element is serving as a proxy for an XML element node. */
   var isElementProxy = function(el) {
-    return el.hasAttribute("data-gi");
+    return isHtmlElementNode(el) ? el.hasAttribute("data-gi") : false;
   }; // isElementProxy()
+  
+  /* Determine if a given HTML node is an element. XML proxies can only be HTML 
+    elements. */
+  var isHtmlElementNode = function(el) {
+    return el.nodeType === 1;
+  }
   
   /* Detemine if a given HTML element is serving as a proxy for an XML node. */
   var isNodeProxy = function(el) {
-    return el.hasAttribute("data-node-type") || isElementProxy(el);
-  }; // isNodeProxy()
+    var isProxy = isHtmlElementNode(el);
+    if ( isProxy ) {
+      isProxy =  el.hasAttribute("data-node-type") || isElementProxy(el);
+    }
+    return isProxy;
+  }; // is el.hasAttribute("data-node-type") || isElementProxy(el);NodeProxy()
   
   /* A Javascript version of XPath's fn:normalize-space(). Whitespace is deleted 
     from the beginning and end of the given string. Whitespace characters elsewhere 
