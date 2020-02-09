@@ -15,28 +15,36 @@
   <xsl:output encoding="UTF-8" indent="no" method="xhtml"/>
   
   <!--  PARAMETERS  -->
-  <xsl:param name="assets-scripts" as="node()*">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="resources/scripts/xplorator.js"></script>
-  </xsl:param>
-  <xsl:param name="assets-styles" as="node()*">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap"></link>
-    <link rel="stylesheet" href="resources/css/style.css"></link>
-  </xsl:param>
-  <xsl:param name="controller" as="node()?">
-    <div id="controller">
-      <div role="form">
-        <div>
-          <label for="xpath-code">XPath: </label>
-          <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
-        </div>
-        <button name="step">Next step</button>
-      </div>
-    </div>
-  </xsl:param>
-  <xsl:param name="debug" select="false()" as="xs:boolean"/>
+  
+  <!-- Set $include-controller to false() in order to skip adding an XHTML snippet before the XML proxy. 
+    By default, the output will contain an XHTML form with input controls. -->
   <xsl:param name="include-controller" select="true()" as="xs:boolean"/>
+      <!--  -->
+      <xsl:param name="controller" as="node()*">
+        <div id="controller">
+          <div role="form">
+            <div>
+              <label for="xpath-code">XPath: </label>
+              <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
+            </div>
+            <button name="step">Next step</button>
+          </div>
+        </div>
+      </xsl:param>
+  <!-- Set $standalone to true() in order to output a complete XHTML document. By default, only a 
+    fragment is returned. -->
   <xsl:param name="standalone" select="false()" as="xs:boolean"/>
+      <!--  -->
+      <xsl:param name="assets-scripts" as="node()*">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="resources/scripts/xplorator.js"></script>
+      </xsl:param>
+      <!--  -->
+      <xsl:param name="assets-styles" as="node()*">
+        <link rel="stylesheet"
+           href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap"></link>
+        <link rel="stylesheet" href="resources/css/style.css"></link>
+      </xsl:param>
   
   <!--  GLOBAL VERIABLES  -->
   
@@ -93,7 +101,10 @@
   <!--  TEMPLATES, #default mode  -->
   
   <xsl:template match="/">
-    <xsl:variable name="content" as="node()">
+    <div>
+      <xsl:if test="$include-controller">
+        <xsl:copy-of select="$controller"/>
+      </xsl:if>
       <div id="viewer">
         <ol id="document-node" class="node-container">
           <xsl:attribute name="data-node-type" select="'document-node()'"/>
@@ -101,36 +112,20 @@
           <xsl:apply-templates select="node()"/>
         </ol>
       </div>
-    </xsl:variable>
-    <xsl:choose>
-      <!-- In standalone mode, build an HTML document around the representation of the XML document. -->
-      <xsl:when test="$standalone">
-        <html lang="en">
-          <head>
-            <xsl:copy-of select="$assets-styles"/>
-            <xsl:copy-of select="$assets-scripts"/>
-          </head>
-          <body>
-            <xsl:if test="$include-controller">
-              <xsl:copy-of select="$controller"/>
-            </xsl:if>
-            <xsl:copy-of select="$content"/>
-          </body>
-        </html>
-      </xsl:when>
-      <!-- If we're not in standalone mode and the controller is requested, wrap both controller and pseudo-XML 
-        in a <div>. -->
-      <xsl:when test="$include-controller">
-        <div>
-          <xsl:copy-of select="$controller"/>
-          <xsl:copy-of select="$content"/>
-        </div>
-      </xsl:when>
-      <!-- By default, simply output the <div> container. -->
-      <xsl:otherwise>
-        <xsl:copy-of select="$content"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    </div>
+  </xsl:template>
+  
+  <!-- In standalone mode, build an HTML document around the representation of the XML document. -->
+  <xsl:template match="document-node()[$standalone]">
+    <html lang="en">
+      <head>
+        <xsl:copy-of select="$assets-styles"/>
+        <xsl:copy-of select="$assets-scripts"/>
+      </head>
+      <body>
+        <xsl:next-match/>
+      </body>
+    </html>
   </xsl:template>
   
   

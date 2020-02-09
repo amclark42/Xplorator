@@ -22,7 +22,7 @@ var xplr = xplr || {};
       classedNode = new that.XmlNode(el);
     }
     return classedNode;
-  }; // classifyNode
+  }; // classifyNode()
   
   /*  */
   var getChildren = function(el, callback, context) {
@@ -35,14 +35,14 @@ var xplr = xplr || {};
   
   /* Detemine if a given HTML element is serving as a proxy for an XML element node. */
   var isElementProxy = function(el) {
-    return isHtmlElementNode(el) ? el.hasAttribute("data-gi") : false;
+    return isHtmlElementNode(el) && el.hasAttribute("data-gi");
   }; // isElementProxy()
   
   /* Determine if a given HTML node is an element. XML proxies can only be HTML 
     elements. */
   var isHtmlElementNode = function(el) {
     return el.nodeType === 1;
-  }
+  } // isHtmlElementNode()
   
   /* Detemine if a given HTML element is serving as a proxy for an XML node. */
   var isNodeProxy = function(el) {
