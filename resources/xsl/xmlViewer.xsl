@@ -22,12 +22,18 @@
       <!--  -->
       <xsl:param name="controller" as="node()*">
         <div id="controller">
-          <div role="form">
+          <div id="controls" role="form">
             <div>
               <label for="xpath-code">XPath: </label>
               <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
             </div>
             <button name="step">Next step</button>
+          </div>
+          <div id="summary">
+            <div>
+              <label for="current-xpath">Current XPath: </label>
+              <output name="current-xpath" form="controls" for="xpath-code"></output>
+            </div>
           </div>
         </div>
       </xsl:param>
@@ -45,6 +51,7 @@
            href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap"></link>
         <link rel="stylesheet" href="resources/css/style.css"></link>
       </xsl:param>
+  
   
   <!--  GLOBAL VERIABLES  -->
   

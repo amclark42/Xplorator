@@ -242,7 +242,7 @@ var xplr = xplr || {};
           prevNodes = this.axisPopulace,
           candidates = null;
       if ( !this.isComplete() ) {
-        currentContext = this.iteration === 0 ? nodeSeq : this.axisPopulace;
+        currentContext = this.iteration === 0 ? nodeSeq : prevNodes;
         currentContext.forEach( function(node) {
           var nodeAxis = node.getAxis(this.axis);
           if ( nodeAxis !== null ) {
