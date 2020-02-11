@@ -104,36 +104,14 @@ var xplr = xplr || {};
   /*** Class definitions ***/
   
   this.Dispatcher = class {
-    constructor(root) {
+    constructor(root, summaryEl) {
       this.node = root;
       this.xpath = null;
       this.queue = [];
       this.currentPlace = [];
       this.currentPlace.push(this.node);
+      this.summary = summaryEl || null;
     }
-    
-    manageQueue(e) {
-      var xpathReq,
-          form = d3.select(e.target.parentNode);
-      xpathReq = form.select('#xpath-code').property('value');
-      /* If the event indicates a new XPath has been input, clear the queue. */
-      if ( xpathReq !== this.xpath ) {
-        this.queue = [];
-      }
-      this.xpath = xpathReq;
-      /* If the queue is empty, generate a new PathStep. */
-      if ( this.queue.length === 0 ) {
-        this.queue.push(new that.PathStep(this.xpath, this.currentPlace));
-      /* If the current XPath expression is complete, remove it and get the next one. */
-      } else if ( this.queue[0].isComplete() ) {
-        var prev = this.queue.shift(),
-            next = prev.nextPath;
-        if ( next !== null ) {
-          this.queue.push(next);
-        }
-      }
-      console.log(this.queue[0]);
-    } // dispatcher.manageQueue()
     
     clearVisuals() {
       var onLastStep = this.queue[0].isFinal(),
@@ -148,6 +126,33 @@ var xplr = xplr || {};
         prevMatches.classed('expr-match', false);
       }
     } // dispatcher.clearVisuals()
+    
+    manageQueue(e) {
+      var xpathReq,
+          form = d3.select(e.target.parentNode);
+      xpathReq = form.select('#xpath-code').property('value');
+      /* If the event indicates a new XPath has been input, clear the queue. */
+      if ( xpathReq !== this.xpath ) {
+        this.queue = [];
+        this.summary.html(null);
+      }
+      this.xpath = xpathReq;
+      /* If the queue is empty, generate a new PathStep. */
+      if ( this.queue.length === 0 ) {
+        var newStep = new that.PathStep(this.xpath, this.currentPlace);
+        this.queue.push(newStep);
+        this.summary.html(newStep.expr);
+      /* If the current XPath expression is complete, remove it and get the next one. */
+      } else if ( this.queue[0].isComplete() ) {
+        var prev = this.queue.shift(),
+            next = prev.nextPath;
+        if ( next !== null ) {
+          this.queue.push(next);
+          this.summary.html(next.expr);
+        }
+      }
+      console.log(this.queue[0]);
+    } // dispatcher.manageQueue()
     
     stepInto(e) {
       this.manageQueue(e);
@@ -180,7 +185,9 @@ var xplr = xplr || {};
       var regexStep, match, ns,
           useXPath = normalizeSpace(xpath);
       match = xpathRegex.exec(useXPath);
+      this.expr = match[0];
       //console.log(match);
+      this.msg = {};
       // Recover from a string that doesn't match expectations about XPath.
       if ( match === null ) {
         this.msg = {
@@ -204,7 +211,7 @@ var xplr = xplr || {};
             this.axis = 
               match[1].replace(/\/(self|child|descendant)::$/, '$1');
         }
-        this.gi = match[2];
+        this.axisSpecifier = match[2];
       }
       this.axisPopulace = [];
       this.iteration = 0;
@@ -217,6 +224,19 @@ var xplr = xplr || {};
       }
       return expr;
     } // pathStep.nextPath
+    
+    get translation() {
+      var str = '';
+      switch (this.msg['type']) {
+        case undefined:
+          str += this.axisSpecifier+" at "+this.axis;
+          break;
+        case 'error':
+          str += this.msg['say'];
+          break;
+      }
+      return str;
+    } //pathStep.translation
     
     isComplete() {
       var bool;
@@ -268,7 +288,7 @@ var xplr = xplr || {};
     } // pathStep.step()
     
     test(node) {
-      var giMatch = this.gi === node.gi;
+      var giMatch = this.axisSpecifier === node.gi;
       return giMatch;
     } // pathStep.test()
   }; // PathStep
@@ -351,7 +371,8 @@ var xplr = xplr || {};
 var onLoad = function() {
   var docNode = document.getElementById('document-node'),
       doc = new xplr.Doc(docNode),
-      dispatch = new xplr.Dispatcher(doc),
+      outputEl = d3.select('output[name="current-xpath"]'),
+      dispatch = new xplr.Dispatcher(doc, outputEl),
       xCode = document.getElementById('xpath-code'),
       btnNext = d3.select('button[name="step"]'),
       testXPath = "/mtx:sc/mtx:ti//mtx:fe";
