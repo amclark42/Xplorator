@@ -87,16 +87,23 @@ button:active {
   background-color: #ffcaaa;
   color: #552000;
 }
-#viewer #document-node ol {
+#viewer #document-node .attr-container {
+  display: flex;
+  align-items: baseline;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#viewer #document-node ol,
+#viewer #document-node ul {
   list-style-type: none;
 }
-#viewer #document-node li:before,
-#viewer #document-node li:after {
+#viewer #document-node li[data-node-type='element()']:before,
+#viewer #document-node li[data-node-type='element()']:after {
   color: #803d16;
 }
-#viewer #document-node li[data-gi]:after {
+#viewer #document-node li[data-node-type='element()']:after {
   margin-left: 0.2rem;
-  content: "</" attr(data-gi) ">";
+  content: "</" attr(data-name) ">";
   display: inline-block;
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
@@ -132,11 +139,11 @@ button:active {
 #viewer #document-node li.expr-nonmatch:after {
   color: red;
 }
-#viewer #document-node li.expr-nonmatch[data-gi] {
+#viewer #document-node li.expr-nonmatch[data-node-type='element()'] {
   color: inherit;
 }
-#viewer #document-node li.expr-nonmatch[data-gi] > .container > .node-label,
-#viewer #document-node li.expr-nonmatch[data-gi]:after {
+#viewer #document-node li.expr-nonmatch[data-node-type='element()'] > .container > .node-label,
+#viewer #document-node li.expr-nonmatch[data-node-type='element()']:after {
   color: darkred;
 }
 #viewer #document-node li.expr-nonmatch > ol.node-container {
@@ -146,11 +153,11 @@ button:active {
 #viewer #document-node li.expr-match:after {
   color: #4e9231;
 }
-#viewer #document-node li.expr-match[data-gi] {
+#viewer #document-node li.expr-match[data-node-type='element()'] {
   color: inherit;
 }
-#viewer #document-node li.expr-match[data-gi] > .container > .node-label,
-#viewer #document-node li.expr-match[data-gi]:after {
+#viewer #document-node li.expr-match[data-node-type='element()'] > .container > .node-label,
+#viewer #document-node li.expr-match[data-node-type='element()']:after {
   background-color: #a8db92;
   color: inherit;
 }

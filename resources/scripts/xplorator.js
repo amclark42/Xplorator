@@ -52,7 +52,8 @@ var xplr = xplr || {};
   
   /* Detemine if a given HTML element is serving as a proxy for an XML element node. */
   var isElementProxy = function(el) {
-    return isHtmlElementNode(el) && el.hasAttribute("data-gi");
+    return isHtmlElementNode(el) 
+      && el.getAttribute('data-node-type') === 'element()';
   }; // isElementProxy()
   
   /* Determine if a given HTML node is an element. XML proxies can only be HTML 
@@ -288,8 +289,8 @@ var xplr = xplr || {};
     } // pathStep.step()
     
     test(node) {
-      var giMatch = this.axisSpecifier === node.gi;
-      return giMatch;
+      var nameMatch = this.axisSpecifier === node.name;
+      return nameMatch;
     } // pathStep.test()
   }; // PathStep
   
@@ -343,7 +344,7 @@ var xplr = xplr || {};
     constructor(el, namespace) {
       super(el);
       this.types.unshift('element()');
-      this.gi = el.dataset.gi;
+      this.name = el.dataset.name;
       this.namespace = el.dataset.ns || namespace || null;
       this.children = [];
       /* Identify the child XML proxies inside a node container <ol>, and create 

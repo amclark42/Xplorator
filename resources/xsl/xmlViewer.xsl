@@ -6,7 +6,9 @@
   exclude-result-prefixes="#all"
   version="2.0">
   <!--
-    ...
+    Xplorator XML Viewer
+    
+    Converts a well-formed XML file into HTML5, with list items representing the tree structure.
     
     Ashley M. Clark
     2020
@@ -14,7 +16,11 @@
   
   <xsl:output encoding="UTF-8" indent="no" method="xhtml"/>
   
-  <!--  PARAMETERS  -->
+  <!--
+    
+    PARAMETERS
+    
+    -->
   
   <!-- Set $include-controller to false() in order to skip adding an XHTML snippet before the XML proxy. 
     By default, the output will contain an XHTML form with input controls. -->
@@ -53,19 +59,26 @@
       </xsl:param>
   
   
-  <!--  GLOBAL VERIABLES  -->
+  <!--
+    
+    GLOBAL VERIABLES
+    
+    -->
   
   
-  
-  <!--  IDENTITY TEMPLATES  -->
+  <!--
+    
+    IDENTITY TEMPLATES
+    
+    -->
   
   <xsl:template match="*" mode="#all">
     <xsl:variable name="isList" select="not(empty(node()))"/>
     <li>
-      <xsl:call-template name="element-data"/>
+      <xsl:attribute name="data-node-type" select="'element()'"/>
+      <xsl:call-template name="name-data"/>
       <xsl:call-template name="axis-parent"/>
       <xsl:call-template name="axis-children"/>
-      <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:call-template name="node-labels"/>
       <ol class="node-container">
         <xsl:apply-templates mode="#current"/>
@@ -76,16 +89,28 @@
   <!-- Attributes become HTML data attributes. -->
   <xsl:template match="@*" mode="#all">
     <xsl:variable name="attName" select="name()"/>
-    <xsl:variable name="dataAttName" select="lower-case(local-name())"/>
-    <xsl:attribute name="data-{$dataAttName}">
+    <xsl:variable name="useQuoteMark">
+      <xsl:variable name="double">
+        <xsl:text>"</xsl:text>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="contains(., $double)">
+          <xsl:text>'</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$double"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <li class="code">
+      <xsl:attribute name="data-node-type" select="'attribute()'"/>
+      <xsl:call-template name="name-data"/>
+      <xsl:value-of select="$attName"/>
+      <xsl:text>=</xsl:text>
+      <xsl:value-of select="$useQuoteMark"/>
       <xsl:value-of select="."/>
-    </xsl:attribute>
-    <!-- Preserve the original attribute name. -->
-    <xsl:if test="$attName ne $dataAttName">
-      <xsl:attribute name="data-{$dataAttName}-name">
-        <xsl:value-of select="$attName"/>
-      </xsl:attribute>
-    </xsl:if>
+      <xsl:value-of select="$useQuoteMark"/>
+    </li>
   </xsl:template>
   
   <xsl:template match="text()" mode="#all">
@@ -105,7 +130,11 @@
   </xsl:template>
   
   
-  <!--  TEMPLATES, #default mode  -->
+  <!--
+    
+    TEMPLATES, #default mode
+    
+    -->
   
   <xsl:template match="/">
     <div>
@@ -136,12 +165,15 @@
   </xsl:template>
   
   
-  <!--  NAMED TEMPLATES  -->
+  <!--
+    
+    NAMED TEMPLATES
+    
+    -->
   
   <!-- Identify the current node's children. -->
   <xsl:template name="axis-children">
-    <xsl:variable name="children" 
-      select="( node() | comment() | processing-instruction() )"/>
+    <xsl:variable name="children" select="( node() | comment() | processing-instruction() )"/>
     <xsl:attribute name="data-axis-children">
       <xsl:value-of select="as:list-nodes($children)"/>
     </xsl:attribute>
@@ -153,9 +185,9 @@
   </xsl:template>
   
   <!-- Create some data attributes with information about the XML element. -->
-  <xsl:template name="element-data">
+  <xsl:template name="name-data">
     <xsl:variable name="myNamespace" select="namespace-uri()"/>
-    <xsl:attribute name="data-gi" select="name()"/>
+    <xsl:attribute name="data-name" select="name()"/>
     <!-- Don't bother listing the namespace URI unless it differs from this element's parent's 
       namespace URI. -->
     <xsl:if test="$myNamespace ne namespace-uri(parent::*)">
@@ -171,11 +203,21 @@
         <xsl:value-of select="name()"/>
         <xsl:text>&gt;</xsl:text>
       </span>
+      <span class="attr-container">
+        <span class="heading">Attributes:</span>
+        <ul>
+          <xsl:apply-templates select="@*" mode="#current"/>
+        </ul>
+      </span>
     </span>
   </xsl:template>
   
   
-  <!--  FUNCTIONS  -->
+  <!--
+    
+    FUNCTIONS
+    
+    -->
   
   <!-- Given a sequence of nodes, create a string list representation of the sequence. Names in the list 
     will be separated by commas. -->
