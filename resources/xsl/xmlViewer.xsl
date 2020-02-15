@@ -79,7 +79,7 @@
       <xsl:call-template name="name-data"/>
       <xsl:call-template name="axis-parent"/>
       <xsl:call-template name="axis-children"/>
-      <xsl:call-template name="node-labels"/>
+      <xsl:call-template name="element-labels"/>
       <ol class="node-container">
         <xsl:apply-templates mode="#current"/>
       </ol>
@@ -106,11 +106,15 @@
     <li class="code">
       <xsl:attribute name="data-node-type" select="'attribute()'"/>
       <xsl:call-template name="name-data"/>
-      <xsl:value-of select="$attName"/>
+      <span class="xml-label">
+        <xsl:value-of select="$attName"/>
+      </span>
       <xsl:text>=</xsl:text>
-      <xsl:value-of select="$useQuoteMark"/>
-      <xsl:value-of select="."/>
-      <xsl:value-of select="$useQuoteMark"/>
+      <span class="syntax-highlight">
+        <xsl:value-of select="$useQuoteMark"/>
+        <xsl:value-of select="."/>
+        <xsl:value-of select="$useQuoteMark"/>
+      </span>
     </li>
     <xsl:text> </xsl:text>
   </xsl:template>
@@ -198,9 +202,9 @@
   </xsl:template>
   
   <!-- Create human-readable labels for this node's HTML representation. -->
-  <xsl:template name="node-labels">
+  <xsl:template name="element-labels">
     <span class="container">
-      <span class="code node-label">
+      <span class="code xml-label">
         <xsl:text>&lt;</xsl:text>
         <xsl:value-of select="name()"/>
         <xsl:text>&gt;</xsl:text>

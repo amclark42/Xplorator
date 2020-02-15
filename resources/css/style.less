@@ -50,6 +50,23 @@
     font-family: @monospace;
     font-size: 1.15rem;
   }
+  
+  .el-tags() {
+    padding: 0.1rem 0.15rem;
+    background-color: @rust_lightest;
+    .xml-label();
+    .code();
+  }
+  
+  .syntax-highlight {
+    color: @rust;
+  }
+  
+  .xml-label {
+    border-radius: 0.5rem;
+    color: @rust_darkest;
+  }
+
 
 //*  STYLES
 
@@ -142,13 +159,6 @@ button {
       display: block;
     }
     
-    .node-label {
-      border-radius: 0.5rem;
-      padding: 0.1rem 0.15rem;
-      background-color: @rust_lightest;
-      color: @rust_darkest;
-    } // #viewer #document-node .node-label
-    
     .attr-container {
       display: inline-flex;
       align-items: baseline;
@@ -184,19 +194,30 @@ button {
           margin-left: 0.2rem;
           content: "</" attr(data-name) ">";
           display: inline-block;
-          .node-label();
-          .code();
+          .el-tags();
+        }
+        
+        > .container > .xml-label {
+          .el-tags();
         }
       } // #viewer #document-node li[data-node-type='element()']
       
       &[data-node-type='attribute()'] {
         
-        &:before {
-          margin-left: 0.2rem;
-          content: "@";
-          display: inline-block;
-          .code();
-        }
+        .xml-label {
+          padding-right: 0.15rem;
+          color: @stormy-sky;
+          font-style: italic;
+          
+          &:before {
+            margin-left: 0.2rem;
+            content: "@";
+            display: inline-block;
+            .code();
+            font-size: 1rem;
+            color: @stormy-sky-lightest;
+          }
+        } // & .xml-label
       } // #viewer #document-node li[data-node-type='attribute()']
       
       &[data-node-type='comment()'] {
@@ -225,20 +246,20 @@ button {
       } // #viewer #document-node li[data-node-type='text()']
       
       &.expr-nonmatch {
-        color: red;
+        color: crimson;
         
         &:before, &:after {
-          color: red;
+          color: crimson;
         }
         
         &[data-node-type='element()'] {
           color: inherit;
           
-          & > .container > .node-label,
+          & > .container > .xml-label,
           &:after {
-            color: darkred;
+            color: crimson;
           }
-        } // &[data-gi]
+        } // &[data-node-type='element()']
         
         > ol.node-container {
           border-color: red;
@@ -255,12 +276,12 @@ button {
         &[data-node-type='element()'] {
           color: inherit;
           
-          & > .container > .node-label,
+          & > .container > .xml-label,
           &:after {
             background-color: @forest-green-lightest;
             color: inherit;
           }
-        } // &[data-gi]
+        } // &[data-node-type='element()']
         
         > ol.node-container {
           border-color: @forest-green-lighter;
