@@ -15,7 +15,7 @@ ol {
   padding-left: 1.15rem;
 }
 ol li {
-  margin: 0.5rem 0;
+  margin: 0 0 0.65rem;
 }
 button {
   border: medium outset #748ba7;
@@ -81,6 +81,9 @@ button:active {
   background-color: #f9f7f4;
   list-style-type: none;
 }
+#viewer #document-node .container {
+  display: block;
+}
 #viewer #document-node .node-label {
   border-radius: 0.5rem;
   padding: 0.1rem 0.15rem;
@@ -88,17 +91,27 @@ button:active {
   color: #552000;
 }
 #viewer #document-node .attr-container {
-  display: flex;
+  display: inline-flex;
   align-items: baseline;
   flex-direction: row;
   flex-wrap: wrap;
+}
+#viewer #document-node .attr-container > ul {
+  padding-left: 0;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#viewer #document-node .attr-container li[data-node-type='attribute()']:before,
+#viewer #document-node .attr-container .code {
+  font-size: 1rem;
 }
 #viewer #document-node ol,
 #viewer #document-node ul {
   list-style-type: none;
 }
-#viewer #document-node li[data-node-type='element()']:before,
-#viewer #document-node li[data-node-type='element()']:after {
+#viewer #document-node li:before,
+#viewer #document-node li:after {
   color: #803d16;
 }
 #viewer #document-node li[data-node-type='element()']:after {
@@ -109,6 +122,13 @@ button:active {
   padding: 0.1rem 0.15rem;
   background-color: #ffcaaa;
   color: #552000;
+  font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
+  font-size: 1.15rem;
+}
+#viewer #document-node li[data-node-type='attribute()']:before {
+  margin-left: 0.2rem;
+  content: "@";
+  display: inline-block;
   font-family: "Ubuntu Mono", "Lucida Console", Monaco, monospace;
   font-size: 1.15rem;
 }

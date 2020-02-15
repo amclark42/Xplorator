@@ -102,6 +102,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    <xsl:text> </xsl:text>
     <li class="code">
       <xsl:attribute name="data-node-type" select="'attribute()'"/>
       <xsl:call-template name="name-data"/>
@@ -111,6 +112,7 @@
       <xsl:value-of select="."/>
       <xsl:value-of select="$useQuoteMark"/>
     </li>
+    <xsl:text> </xsl:text>
   </xsl:template>
   
   <xsl:template match="text()" mode="#all">
@@ -204,7 +206,7 @@
         <xsl:text>&gt;</xsl:text>
       </span>
       <span class="attr-container">
-        <span class="heading">Attributes:</span>
+        <!--<span class="heading">Attributes:</span>-->
         <ul>
           <xsl:apply-templates select="@*" mode="#current"/>
         </ul>
