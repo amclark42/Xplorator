@@ -30,13 +30,19 @@ xquery version "3.1";
     %rest:path('/xplorator')
     %output:method('xhtml')
   function exp:get-form() {
+    let $acceptableFileTypes := (
+        '.xml',
+        '.odd', '.rng', '.svg', '.tei', '.xhtml',
+        'application/xml', 'text/xml',
+        'application/*+xml', 'text/*+xml'
+      )
     let $form :=
       <form action="xplorator/browser" method="post" autocomplete="off" 
          enctype="multipart/form-data">
         <div>
           <label for="xmlfile">XML file:</label>
           <input type="file" id="xmlfile" name="xmlfile" required="true"
-             accept=".xml,.tei,text/xml,application/xml,text/*+xml,application/*+xml" />
+             accept="{ string-join($acceptableFileTypes, ',') }" />
         </div>
         <button type="submit">Transform</button>
       </form>
