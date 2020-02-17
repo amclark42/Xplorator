@@ -33,7 +33,8 @@
               <label for="xpath-code">XPath: </label>
               <input type="text" id="xpath-code" name="xpath-code" spellcheck="false"></input>
             </div>
-            <button name="step">Next step</button>
+            <button name="step-node">Navigate tree</button>
+            <button name="step-expr">Run next expression</button>
           </div>
           <div id="summary">
             <div>

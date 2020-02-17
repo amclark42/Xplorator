@@ -114,6 +114,26 @@ var xplr = xplr || {};
       this.summary = summaryEl || null;
     }
     
+    animate(e) {
+      var elSeqMatched,
+          nodeStep = this.queue[0],
+          wasComplete = nodeStep.isComplete(),
+          elSeq = that.getHtmlElements(nodeStep.axisPopulace);
+      /* As long as this step isn't the last, mark all non-matches in the axis so far. */
+      if ( !nodeStep.isFinal() || !wasComplete ) {
+        d3.selectAll(elSeq)
+            .classed('expr-nonmatch', true);
+      }
+      /* If this step identified any more node proxies, add them to the array of matches. */
+      if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
+        elSeqMatched = that.getHtmlElements(this.currentPlace);
+      }
+      //console.log(elSeq);
+      d3.selectAll(elSeqMatched)
+          .classed('expr-nonmatch', false)
+          .classed('expr-match', true);
+    } // dispatcher.animate()
+    
     clearVisuals() {
       var onLastStep = this.queue[0].isFinal(),
           hasIterated = this.queue[0].iteration > 0,
@@ -155,30 +175,31 @@ var xplr = xplr || {};
       console.log(this.queue[0]);
     } // dispatcher.manageQueue()
     
-    stepInto(e) {
-      this.manageQueue(e);
+    step(e) {
       if ( this.queue.length >= 1 ) {
-        var nodeStep = this.queue[0],
-            wasComplete = nodeStep.isComplete(),
-            elSeqFull = [],
-            elSeqMatched = [];
+        var nodeStep = this.queue[0];
         this.clearVisuals();
         this.currentPlace = nodeStep.step(this.currentPlace);
-        elSeqFull = that.getHtmlElements(nodeStep.axisPopulace);
+        this.animate();
         //console.log(elSeqFull);
-        if ( !nodeStep.isFinal() || !wasComplete ) {
-          d3.selectAll(elSeqFull)
-              .classed('expr-nonmatch', true);
-        }
-        if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
-          elSeqMatched = that.getHtmlElements(this.currentPlace);
-        }
-        //console.log(elSeq);
-        d3.selectAll(elSeqMatched)
-            .classed('expr-nonmatch', false)
-            .classed('expr-match', true);
       }
+      return nodeStep;
+    } // dispatcher.step()
+    
+    stepInto(e) {
+      this.manageQueue(e);
+      this.step(e);
     } // dispatcher.stepInto()
+    
+    stepThrough(e) {
+      this.manageQueue(e);
+      var nodeStep = this.queue[0];
+      //if ( nodeStep.is )
+      do {
+        this.step(e);
+        console.log("Axis populace: "+nodeStep.axisPopulace.length);
+      } while ( !nodeStep.isComplete() );
+    } // dispatcher.stepThrough()
   }; // Dispatcher
   
   this.PathStep = class {
@@ -215,6 +236,7 @@ var xplr = xplr || {};
         this.axisSpecifier = match[2];
       }
       this.axisPopulace = [];
+      this.matchingNodes = [];
       this.iteration = 0;
     }
     
@@ -260,8 +282,7 @@ var xplr = xplr || {};
     
     step(nodeSeq) {
       var currentContext,
-          prevNodes = this.axisPopulace,
-          candidates = null;
+          prevNodes = this.axisPopulace;
       if ( !this.isComplete() ) {
         currentContext = this.iteration === 0 ? nodeSeq : prevNodes;
         currentContext.forEach( function(node) {
@@ -273,7 +294,7 @@ var xplr = xplr || {};
             }, this);
             this.axisPopulace = this.axisPopulace.concat(nodeAxis);
           }
-          console.log(prevNodes);
+          //console.log(prevNodes);
         }, this);
         /* If no new nodes have been added to the axisPopulace, the expression is 
           complete. Otherwise, return the new nodes which are a positive match for 
@@ -281,11 +302,11 @@ var xplr = xplr || {};
         if ( prevNodes.length === this.axisPopulace.length ) {
           this.axisPopulace = [];
         } else {
-          candidates = this.axisPopulace.filter(this.test, this);
+          this.matchingNodes = this.axisPopulace.filter(this.test, this);
         }
         this.iteration++;
       }
-      return candidates;
+      return this.matchingNodes;
     } // pathStep.step()
     
     test(node) {
@@ -308,6 +329,10 @@ var xplr = xplr || {};
     get nodeType() {
       return this.types[0];
     } // xmlNode.nodeType
+    
+    get xmlProxy() {
+      return that.getHtmlElements(this);
+    }
     
     getAxis(step) {
       var moveTo = [];
@@ -375,13 +400,18 @@ var onLoad = function() {
       outputEl = d3.select('output[name="current-xpath"]'),
       dispatch = new xplr.Dispatcher(doc, outputEl),
       xCode = document.getElementById('xpath-code'),
-      btnNext = d3.select('button[name="step"]'),
+      btnNextNode = d3.select('button[name="step-node"]'),
+      btnNextExpr = d3.select('button[name="step-expr"]'),
       testXPath = "/mtx:sc/mtx:ti//mtx:fe";
   console.log(doc);
   xCode.setRangeText(testXPath);
-  btnNext.datum(dispatch)
+  btnNextNode.datum(dispatch)
       .on('click', function() {
         dispatch.stepInto(d3.event);
+      });
+  btnNextExpr.datum(dispatch)
+      .on('click', function() {
+        dispatch.stepThrough(d3.event);
       });
 };
 
