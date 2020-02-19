@@ -114,24 +114,30 @@ var xplr = xplr || {};
       this.summary = summaryEl || null;
     }
     
-    animate(e) {
+    animate(callback) {
       var elSeqMatched,
           nodeStep = this.queue[0],
           wasComplete = nodeStep.isComplete(),
           elSeq = that.getHtmlElements(nodeStep.axisPopulace);
-      /* As long as this step isn't the last, mark all non-matches in the axis so far. */
-      if ( !nodeStep.isFinal() || !wasComplete ) {
-        d3.selectAll(elSeq)
-            .classed('expr-nonmatch', true);
-      }
       /* If this step identified any more node proxies, add them to the array of matches. */
       if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
         elSeqMatched = that.getHtmlElements(this.currentPlace);
       }
       //console.log(elSeq);
-      d3.selectAll(elSeqMatched)
-          .classed('expr-nonmatch', false)
-          .classed('expr-match', true);
+      d3.selectAll(elSeq)
+        .transition()
+          .delay(500)
+          .on('end', function() {
+            /* As long as this step isn't the last, mark all non-matches in the axis so far. */
+            if ( !nodeStep.isFinal() || !wasComplete ) {
+              d3.selectAll(elSeq)
+                  .classed('expr-nonmatch', true);
+            }
+            d3.selectAll(elSeqMatched)
+                .classed('expr-nonmatch', false)
+                .classed('expr-match', true);
+            if ( callback !== undefined ) callback();
+          });
     } // dispatcher.animate()
     
     clearVisuals() {
@@ -175,12 +181,12 @@ var xplr = xplr || {};
       console.log(this.queue[0]);
     } // dispatcher.manageQueue()
     
-    step(e) {
+    step(callback) {
       if ( this.queue.length >= 1 ) {
         var nodeStep = this.queue[0];
         this.clearVisuals();
         this.currentPlace = nodeStep.step(this.currentPlace);
-        this.animate();
+        this.animate(callback);
         //console.log(elSeqFull);
       }
       return nodeStep;
@@ -188,17 +194,25 @@ var xplr = xplr || {};
     
     stepInto(e) {
       this.manageQueue(e);
-      this.step(e);
+      this.step();
     } // dispatcher.stepInto()
     
     stepThrough(e) {
-      this.manageQueue(e);
-      var nodeStep = this.queue[0];
-      //if ( nodeStep.is )
-      do {
-        this.step(e);
+      var nodeStep = this.queue[0],
+          doManageQueue = nodeStep === undefined || nodeStep.isComplete(),
+          self = this;
+      if ( e !== undefined && doManageQueue ) {
+        this.manageQueue(e);
+        nodeStep = this.queue[0];
+      }
+      if ( !nodeStep.isComplete() ) {
         console.log("Axis populace: "+nodeStep.axisPopulace.length);
-      } while ( !nodeStep.isComplete() );
+        this.step( function() {
+          self.stepThrough();
+        });
+      } else {
+        console.log("Done with expression "+nodeStep.expr);
+      }
     } // dispatcher.stepThrough()
   }; // Dispatcher
   
