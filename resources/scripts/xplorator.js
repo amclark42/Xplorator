@@ -136,7 +136,11 @@ var xplr = xplr || {};
             d3.selectAll(elSeqMatched)
                 .classed('expr-nonmatch', false)
                 .classed('expr-match', true);
-            if ( callback !== undefined ) callback();
+            //console.log(this.dataset);
+            if ( callback !== undefined ) {
+              callback();
+              //callback.call(nodeStep, this.dataset);
+            }
           });
     } // dispatcher.animate()
     
@@ -181,11 +185,16 @@ var xplr = xplr || {};
       console.log(this.queue[0]);
     } // dispatcher.manageQueue()
     
-    step(callback) {
+    step(callback, nodeSeq) {
       if ( this.queue.length >= 1 ) {
         var nodeStep = this.queue[0];
         this.clearVisuals();
-        this.currentPlace = nodeStep.step(this.currentPlace);
+        if ( nodeSeq !== undefined ) {
+          this.currentPlace.push(nodeSeq);
+        } else {
+          this.currentPlace = nodeStep.step(this.currentPlace);
+        }
+        //console.log(this.currentPlace);
         this.animate(callback);
         //console.log(elSeqFull);
       }
@@ -197,7 +206,7 @@ var xplr = xplr || {};
       this.step();
     } // dispatcher.stepInto()
     
-    stepThrough(e) {
+    stepThrough(e, nodeSeq) {
       var nodeStep = this.queue[0],
           doManageQueue = nodeStep === undefined || nodeStep.isComplete(),
           self = this;
@@ -207,8 +216,9 @@ var xplr = xplr || {};
       }
       if ( !nodeStep.isComplete() ) {
         console.log("Axis populace: "+nodeStep.axisPopulace.length);
-        this.step( function() {
-          self.stepThrough();
+        this.step( function(node) {
+          var takeNextStep = self.stepThrough;
+          takeNextStep.call(self, undefined, nodeSeq);
         });
       } else {
         console.log("Done with expression "+nodeStep.expr);
@@ -295,6 +305,7 @@ var xplr = xplr || {};
     } // pathStep.isFinal()
     
     step(nodeSeq) {
+      console.log(this);
       var currentContext,
           prevNodes = this.axisPopulace;
       if ( !this.isComplete() ) {
