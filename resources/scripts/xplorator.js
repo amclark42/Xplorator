@@ -114,24 +114,25 @@ var xplr = xplr || {};
       this.summary = summaryEl || null;
     }
     
-    animate(callback) {
+    animate(callback, nodeSeq) {
       var elSeqMatched,
           nodeStep = this.queue[0],
           wasComplete = nodeStep.isComplete(),
-          elSeq = that.getHtmlElements(nodeStep.axisPopulace);
+          elAxisSeq = that.getHtmlElements(nodeStep.axisPopulace),
+          elCurrentSeq = nodeSeq !== undefined ? that.getHtmlElements(nodeSeq) : elAxisSeq;
       /* If this step identified any more node proxies, add them to the array of matches. */
       if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
         elSeqMatched = that.getHtmlElements(this.currentPlace);
       }
-      //console.log(elSeq);
-      d3.selectAll(elSeq)
+      //console.log(nodeSeq);
+      d3.selectAll(elCurrentSeq)
         .transition()
-          .delay(50)
-          .duration(350)
+          .delay(100)
+          .duration(450)
           .on('start', function() {
             /* As long as this step isn't the last, mark all non-matches in the axis so far. */
             if ( !nodeStep.isFinal() || !wasComplete ) {
-              d3.selectAll(elSeq)
+              d3.selectAll(elCurrentSeq)
                   .classed('expr-nonmatch', true);
             }
             d3.selectAll(elSeqMatched)
@@ -139,10 +140,12 @@ var xplr = xplr || {};
                 .classed('expr-match', true);
             //console.log(this.dataset);
           }).on('end', function() {
-            if ( wasComplete ) {
-              d3.selectAll(elSeq)
+            if ( nodeStep.isFinal() && wasComplete ) {
+              console.log("Clearing non-matches");
+              d3.selectAll(elCurrentSeq)
                 .classed('expr-nonmatch', false);
             }
+            //console.log(callback);
             if ( callback !== undefined ) {
               callback(this.dataset);
               //console.log(this.dataset)
@@ -188,20 +191,21 @@ var xplr = xplr || {};
           this.summary.html(next.expr);
         }
       }
-      console.log(this.queue[0]);
+      //console.log(this.queue[0]);
     } // dispatcher.manageQueue()
     
     step(callback, nodeSeq) {
       if ( this.queue.length >= 1 ) {
         var nodeStep = this.queue[0];
         this.clearVisuals();
+        //console.log(nodeSeq);
         if ( nodeSeq !== undefined ) {
           this.currentPlace.push(nodeSeq);
         } else {
           this.currentPlace = nodeStep.step(this.currentPlace);
         }
         //console.log(this.currentPlace);
-        this.animate(callback);
+        this.animate(callback, nodeSeq);
         //console.log(elSeqFull);
       }
       return nodeStep;
@@ -222,11 +226,11 @@ var xplr = xplr || {};
         nodeStep = this.queue[0];
       }
       if ( !nodeStep.isComplete() ) {
-        var callback = function(nodeSeq) {
-            this.stepThrough(undefined, nodeSeq);
+        var callback = function(nodeSeq2) {
+            this.stepThrough(undefined, nodeSeq2);
           }.bind(self);
         console.log("Axis populace: "+nodeStep.axisPopulace.length);
-        this.step(callback);
+        this.step(callback, nodeSeq);
       } else {
         console.log("Done with expression "+nodeStep.expr);
       }
