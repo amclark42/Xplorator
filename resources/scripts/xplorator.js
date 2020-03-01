@@ -126,8 +126,9 @@ var xplr = xplr || {};
       //console.log(elSeq);
       d3.selectAll(elSeq)
         .transition()
-          .delay(500)
-          .on('end', function() {
+          .delay(50)
+          .duration(350)
+          .on('start', function() {
             /* As long as this step isn't the last, mark all non-matches in the axis so far. */
             if ( !nodeStep.isFinal() || !wasComplete ) {
               d3.selectAll(elSeq)
@@ -137,16 +138,21 @@ var xplr = xplr || {};
                 .classed('expr-nonmatch', false)
                 .classed('expr-match', true);
             //console.log(this.dataset);
+          }).on('end', function() {
+            if ( wasComplete ) {
+              d3.selectAll(elSeq)
+                .classed('expr-nonmatch', false);
+            }
             if ( callback !== undefined ) {
-              callback();
-              //callback.call(nodeStep, this.dataset);
+              callback(this.dataset);
+              //console.log(this.dataset)
             }
           });
     } // dispatcher.animate()
     
     clearVisuals() {
       var onLastStep = this.queue[0].isFinal(),
-          hasIterated = this.queue[0].iteration > 0,
+          hasIterated = this.queue[0].hasIterated(),
           prevMatches = d3.selectAll('.expr-match');
       // Restore previous non-matches to the default styling.
       d3.selectAll('.expr-nonmatch')
@@ -212,14 +218,15 @@ var xplr = xplr || {};
           self = this;
       if ( e !== undefined && doManageQueue ) {
         this.manageQueue(e);
+        this.clearVisuals();
         nodeStep = this.queue[0];
       }
       if ( !nodeStep.isComplete() ) {
+        var callback = function(nodeSeq) {
+            this.stepThrough(undefined, nodeSeq);
+          }.bind(self);
         console.log("Axis populace: "+nodeStep.axisPopulace.length);
-        this.step( function(node) {
-          var takeNextStep = self.stepThrough;
-          takeNextStep.call(self, undefined, nodeSeq);
-        });
+        this.step(callback);
       } else {
         console.log("Done with expression "+nodeStep.expr);
       }
@@ -284,6 +291,10 @@ var xplr = xplr || {};
       }
       return str;
     } //pathStep.translation
+    
+    hasIterated() {
+      return this.iteration > 0;
+    }
     
     isComplete() {
       var bool;
