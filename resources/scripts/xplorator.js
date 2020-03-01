@@ -6,12 +6,12 @@ var xplr = xplr || {};
 
 // Create an anonymous function to hold functions to be namespaced.
 (function() {
-  /* Capture the current context so these functions can refer to themselves even 
-    when the context changes. */
+  /* Capture the current context so these functions can refer to themselves even when the context 
+    changes. */
   var that = this;
   
   
-  /*** Private functions ***/
+  /***  Private functions  ***/
   
   /* Create a RegExp object for an XPath expression. This function is intended ease debugging and
     improvement of the regular expression. */
@@ -56,8 +56,7 @@ var xplr = xplr || {};
       && el.getAttribute('data-node-type') === 'element()';
   }; // isElementProxy()
   
-  /* Determine if a given HTML node is an element. XML proxies can only be HTML 
-    elements. */
+  /* Determine if a given HTML node is an element. XML proxies can only be HTML elements. */
   var isHtmlElementNode = function(el) {
     return el.nodeType === 1;
   } // isHtmlElementNode()
@@ -69,11 +68,11 @@ var xplr = xplr || {};
       isProxy =  el.hasAttribute("data-node-type") || isElementProxy(el);
     }
     return isProxy;
-  }; // is el.hasAttribute("data-node-type") || isElementProxy(el);NodeProxy()
+  }; // isNodeProxy()
   
-  /* A Javascript version of XPath's fn:normalize-space(). Whitespace is deleted 
-    from the beginning and end of the given string. Whitespace characters elsewhere 
-    in the string is reduced to a single space.  */
+  /* A Javascript version of XPath's fn:normalize-space(). Whitespace is deleted from the beginning 
+    and end of the given string. Whitespace characters elsewhere in the string is reduced to a 
+    single space.  */
   var normalizeSpace = function(str) {
     var trimmedStr,
         regexWsBetween = /\s{2,}/g,
@@ -83,7 +82,7 @@ var xplr = xplr || {};
   }; // normalizeSpace()
   
   
-  /*** Public functions ***/
+  /***  Public functions  ***/
   
   this.getHtmlElements = function(nodes) {
     var elSeq = [];
@@ -102,8 +101,14 @@ var xplr = xplr || {};
   }; // this.nodesEqual()
   
   
-  /*** Class definitions ***/
+  /***  Class definitions  ***/
   
+  /*
+   * Dispatcher class
+   *
+   * The dispatcher interfaces between the user and the XPath parser: handling browser events,
+   * queuing new XPath expressions, and taking care of any visual displays.
+   */
   this.Dispatcher = class {
     constructor(root, summaryEl) {
       this.node = root;
@@ -235,8 +240,15 @@ var xplr = xplr || {};
         console.log("Done with expression "+nodeStep.expr);
       }
     } // dispatcher.stepThrough()
-  }; // Dispatcher
+  }; // end Dispatcher
   
+  /*
+   * PathStep class
+   *
+   * This class is the XPath parser and translator. PathSteps are instantiated with an XPath
+   * expression and one or more starting XML node proxies. They step through the tree, testing for
+   * nodes that match their given XPath.
+   */
   this.PathStep = class {
     constructor (xpath, start) {
       var regexStep, match, ns,
@@ -336,9 +348,8 @@ var xplr = xplr || {};
           }
           //console.log(prevNodes);
         }, this);
-        /* If no new nodes have been added to the axisPopulace, the expression is 
-          complete. Otherwise, return the new nodes which are a positive match for 
-          the expression. */
+        /* If no new nodes have been added to the axisPopulace, the expression is complete. 
+          Otherwise, return the new nodes which are a positive match for the expression. */
         if ( prevNodes.length === this.axisPopulace.length ) {
           this.axisPopulace = [];
         } else {
@@ -353,8 +364,14 @@ var xplr = xplr || {};
       var nameMatch = this.axisSpecifier === node.name;
       return nameMatch;
     } // pathStep.test()
-  }; // PathStep
+  }; // end PathStep
   
+  /*
+   * XmlNode class
+   *
+   * This class uses an HTML element as a proxy for an XML node. Each XmlNode maintains its own 
+   * classification information, and is able to return other XmlNodes on request for an XPath axis.
+   */
   this.XmlNode = class {
     constructor (el) {
       var data = el.dataset;
@@ -389,8 +406,14 @@ var xplr = xplr || {};
       }
       return moveTo;
     } // xmlNode.getAxis()
-  }; // XmlNode
+  }; // end XmlNode
   
+  /*
+   * Doc class
+   *
+   * An extension of XmlNode, this class is a proxy for an XML document node. As such, an
+   * instantiation identifies its child nodes.
+   */
   this.Doc = class extends this.XmlNode {
     constructor (el) {
       super(el);
@@ -403,8 +426,14 @@ var xplr = xplr || {};
         }
       }, this)
     }
-  }; // Doc
+  }; // end Doc
   
+  /*
+   * ElNode class
+   *
+   * An extension of XmlNode, this class is a proxy for an XML element node. An instantiation has 
+   * an element name and namespace, and may have an array of child nodes.
+   */
   this.ElNode = class extends this.XmlNode {
     constructor(el, namespace) {
       super(el);
@@ -412,8 +441,7 @@ var xplr = xplr || {};
       this.name = el.dataset.name;
       this.namespace = el.dataset.ns || namespace || null;
       this.children = [];
-      /* Identify the child XML proxies inside a node container <ol>, and create 
-        classes for them. */
+      /* Identify the child XML proxies inside a node container <ol>, and create classes for them. */
       var nodeContainer;
       for (var elChild of el.children) {
         if ( elChild.localName === 'ol' && elChild.className === 'node-container' ) {
@@ -429,7 +457,8 @@ var xplr = xplr || {};
         }, this);
       }
     }
-  }; // ElNode
+  }; // end ElNode
+  
 }).apply(xplr); // Apply the namespace to the anonymous function.
 
 
@@ -455,9 +484,8 @@ var onLoad = function() {
       });
 };
 
-/* Ensure that the callback function above is run, whether or not the DOM has 
-  already been loaded. Solution by Julian Kühnel: 
-  https://www.sitepoint.com/jquery-document-ready-plain-javascript/ */
+/* Ensure that the callback function above is run, whether or not the DOM has already been loaded. 
+  Solution by Julian Kühnel: https://www.sitepoint.com/jquery-document-ready-plain-javascript/ */
 if ( document.readyState === 'complete' 
    || ( document.readyState !== 'loading' && !document.documentElement.doScroll ) 
    ) {
