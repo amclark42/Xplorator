@@ -126,8 +126,8 @@ var xplr = xplr || {};
           elAxisSeq = that.getHtmlElements(nodeStep.axisPopulace),
           elCurrentSeq = nodeSeq !== undefined ? that.getHtmlElements(nodeSeq) : elAxisSeq;
       /* If this step identified any more node proxies, add them to the array of matches. */
-      if ( this.currentPlace !== null && this.currentPlace.length >= 1 ) {
-        elSeqMatched = that.getHtmlElements(this.currentPlace);
+      if ( nodeStep.matchingNodes !== null && nodeStep.matchingNodes.length >= 1 ) {
+        elSeqMatched = that.getHtmlElements(nodeStep.matchingNodes);
       }
       //console.log(nodeSeq);
       d3.selectAll(elCurrentSeq)
@@ -152,7 +152,7 @@ var xplr = xplr || {};
             }
             //console.log(callback);
             if ( callback !== undefined ) {
-              callback(this.dataset);
+              callback(nodeSeq);
               //console.log(this.dataset)
             }
           });
@@ -201,16 +201,18 @@ var xplr = xplr || {};
     
     step(callback, nodeSeq) {
       if ( this.queue.length >= 1 ) {
-        var nodeStep = this.queue[0];
+        var nodeStep = this.queue[0],
+            useNodeSeq;
         this.clearVisuals();
         //console.log(nodeSeq);
         if ( nodeSeq !== undefined ) {
-          this.currentPlace.push(nodeSeq);
+          useNodeSeq = nodeStep.step(nodeSeq);
         } else {
-          this.currentPlace = nodeStep.step(this.currentPlace);
+          useNodeSeq = nodeStep.step(this.currentPlace);
+          this.currentPlace = nodeStep.matchingNodes;
         }
-        //console.log(this.currentPlace);
-        this.animate(callback, nodeSeq);
+        console.log(this.currentPlace);
+        this.animate(callback, useNodeSeq);
         //console.log(elSeqFull);
       }
       return nodeStep;
@@ -230,6 +232,7 @@ var xplr = xplr || {};
         this.clearVisuals();
         nodeStep = this.queue[0];
       }
+      console.log(nodeSeq);
       if ( !nodeStep.isComplete() ) {
         var callback = function(nodeSeq2) {
             this.stepThrough(undefined, nodeSeq2);
@@ -247,7 +250,7 @@ var xplr = xplr || {};
    *
    * This class is the XPath parser and translator. PathSteps are instantiated with an XPath
    * expression and one or more starting XML node proxies. They step through the tree, testing for
-   * nodes that match their given XPath.
+   * node proxies that match their given XPath.
    */
   this.PathStep = class {
     constructor (xpath, start) {
@@ -308,6 +311,21 @@ var xplr = xplr || {};
       return str;
     } //pathStep.translation
     
+    getNextNodesFrom(node) {
+      var nodeAxis = node.getAxis(this.axis);
+      if ( nodeAxis !== null ) {
+        /* Filter out nodes that already have been added to the axisPopulace. */
+        nodeAxis = nodeAxis.filter( function(nodeA) {
+          return !this.axisPopulace.some(nodeB => that.nodesEqual(nodeA, nodeB));
+        }, this);
+        if ( nodeAxis.length === 0 ) {
+          nodeAxis = null;
+        }
+        //this.axisPopulace = this.axisPopulace.concat(nodeAxis);
+      }
+      return nodeAxis;
+    } // pathStep.getNextNodesFrom()
+    
     hasIterated() {
       return this.iteration > 0;
     }
@@ -319,10 +337,10 @@ var xplr = xplr || {};
         case 'ancestor-or-self':
         case 'descendant':
         case 'descendant-or-self':
-          bool = this.iteration >= 1 && this.axisPopulace.length === 0;
+          bool = this.hasIterated() && this.axisPopulace.length === 0;
           break;
         default:
-          bool = this.iteration === 1;
+          bool = this.hasIterated();
       }
       return bool;
     } // pathStep.isComplete()
@@ -333,18 +351,16 @@ var xplr = xplr || {};
     
     step(nodeSeq) {
       console.log(this);
-      var currentContext,
-          prevNodes = this.axisPopulace;
+      var prevContext,
+          prevNodes = this.axisPopulace,
+          currentContext = [];
       if ( !this.isComplete() ) {
-        currentContext = this.iteration === 0 ? nodeSeq : prevNodes;
-        currentContext.forEach( function(node) {
-          var nodeAxis = node.getAxis(this.axis);
+        prevContext = this.iteration === 0 ? nodeSeq : prevNodes;
+        prevContext.forEach( function(node) {
+          var nodeAxis = this.getNextNodesFrom(node);
           if ( nodeAxis !== null ) {
-            /* Filter out nodes that already have been added to the axisPopulace. */
-            nodeAxis = nodeAxis.filter( function(nodeA) {
-              return !this.axisPopulace.some(nodeB => that.nodesEqual(nodeA, nodeB));
-            }, this);
             this.axisPopulace = this.axisPopulace.concat(nodeAxis);
+            currentContext = currentContext.concat(nodeAxis);
           }
           //console.log(prevNodes);
         }, this);
@@ -357,7 +373,7 @@ var xplr = xplr || {};
         }
         this.iteration++;
       }
-      return this.matchingNodes;
+      return currentContext;
     } // pathStep.step()
     
     test(node) {
